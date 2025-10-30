@@ -1,0 +1,4083 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.1680012202681568 0.2703530474610078 0.9479898837629843 1.160490780293625
+  position -5.751547500967733 -10.621127276621 3.798308729853662
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+  luminosity 0.1
+}
+RectangleArena {
+  floorSize 10 10
+  floorTileSize 1 1
+}
+FloorLight {
+  translation 4.75 4.75 0
+  pointLightIntensity 40
+}
+Robot {
+  translation -2.51381 3.14159 0.13
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          ambientIntensity 0.7
+          diffuseColor 0.937255 0.160784 0.160784
+        }
+      }
+      geometry Box {
+        size 0.1 0.1 0.05
+      }
+    }
+    Emitter {
+      channel 1
+    }
+  ]
+  name "localization_system"
+  controller "localization_system"
+  controllerArgs [
+    "1"
+  ]
+  supervisor TRUE
+}
+DEF e-puck0 E-puck {
+  translation -4.78531 -4.49898 6.66134e-15
+  name "e-puck0"
+  controller "robot"
+}
+DEF e-puck1 E-puck {
+  translation -4.56065 -4.38064 0
+  rotation 0 0 1 0.785398
+  name "e-puck1"
+  controller "robot"
+}
+DEF e-puck2 E-puck {
+  translation -4.5766 -4.82883 2.66454e-15
+  rotation 0 0 1 0.785398
+  name "e-puck2"
+  controller "robot"
+}
+DEF e-puck3 E-puck {
+  translation -4.69061 -4.65363 0
+  rotation 0 0 1 0.785398
+  name "e-puck3"
+  controller "robot"
+}
+DEF e-puck4 E-puck {
+  translation -4.47495 -4.6403 2.22045e-15
+  rotation 0 0 1 1.309
+  name "e-puck4"
+  controller "robot"
+}
+DEF obstacle0 Solid {
+  translation -1.2420528234111115 4.46207163345817 0.05
+  children [
+    DEF OBS_GEOM Shape {
+      appearance Appearance {
+        material Material {
+        }
+      }
+      geometry Cylinder {
+        height 0.1
+        radius 0.05
+      }
+    }
+  ]
+  name "obstacle0"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle1 Solid {
+  translation 2.2967400239329105 0.9767189935506622 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle1"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle2 Solid {
+  translation -3.4054154596198787 -3.4056542486715937 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle2"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle3 Solid {
+  translation -4.374972239534825 3.625143843171858 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle3"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle4 Solid {
+  translation 1.001038616257767 2.05991852018085 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle4"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle5 Solid {
+  translation -4.746213506471556 4.6521075364037445 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle5"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle6 Solid {
+  translation 3.2911821439241757 -2.847842804285066 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle6"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle7 Solid {
+  translation -3.149932824649704 -3.134295352451005 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle7"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle8 Solid {
+  translation -1.9380017947005768 0.24508867315915506 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle8"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle9 Solid {
+  translation -0.673744315443054 -2.066831512039385 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle9"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle10 Solid {
+  translation 1.1073436577515565 -3.569010779544786 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle10"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle11 Solid {
+  translation -2.05776797950134 -1.3230177513924524 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle11"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle12 Solid {
+  translation -0.43490715625134424 2.823242017790835 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle12"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle13 Solid {
+  translation -2.973229556632239 0.14092094029475533 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle13"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle14 Solid {
+  translation 0.9149042317342202 -4.490140914072023 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle14"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle15 Solid {
+  translation 1.0646940338242397 -3.261811175495814 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle15"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle16 Solid {
+  translation -4.305989229445733 4.443966818808 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle16"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle17 Solid {
+  translation 4.6097571274381375 3.053133746352965 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle17"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle18 Solid {
+  translation -1.9343236851836303 -3.9830460713368 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle18"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle19 Solid {
+  translation 1.8239069624703532 -0.5924903119779472 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle19"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle20 Solid {
+  translation -3.74182147503669 -0.047748589898425564 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle20"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle21 Solid {
+  translation -4.609553640959338 4.052271980579943 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle21"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle22 Solid {
+  translation -2.3880781821598327 1.6089706151044219 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle22"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle23 Solid {
+  translation -1.8640603467148318 0.19867340966032732 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle23"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle24 Solid {
+  translation 0.46243176549846865 -3.1199408902972827 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle24"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle25 Solid {
+  translation 4.64888781486913 2.723814951275034 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle25"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle26 Solid {
+  translation 0.9692097902297432 4.1765549267288575 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle26"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle27 Solid {
+  translation -4.073924229685997 -3.009769662050463 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle27"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle28 Solid {
+  translation -4.502249839785673 -1.729229725443683 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle28"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle29 Solid {
+  translation -1.102094832074128 -2.2636445854384304 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle29"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle30 Solid {
+  translation 3.2545013406041 -1.4181420657334662 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle30"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle31 Solid {
+  translation -2.1687483540949306 0.42269122326665975 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle31"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle32 Solid {
+  translation -3.55485017274985 2.991750109464993 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle32"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle33 Solid {
+  translation -4.211948627570269 4.8201806723451215 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle33"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle34 Solid {
+  translation 2.6952232160369087 -2.9827147528116935 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle34"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle35 Solid {
+  translation -4.895331040476337 3.1230681417028583 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle35"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle36 Solid {
+  translation 2.0478877040914094 2.267170963605775 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle36"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle37 Solid {
+  translation 2.685576432190863 -4.216957947832506 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle37"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle38 Solid {
+  translation -1.4011892874117011 -3.802896310701216 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle38"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle39 Solid {
+  translation 3.594723916168376 1.2206514555928232 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle39"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle40 Solid {
+  translation -1.6741095539587731 -4.320772332168366 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle40"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle41 Solid {
+  translation -1.8712750150149442 -1.7306851119352045 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle41"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle42 Solid {
+  translation 2.2731011655468345 1.3618189664166103 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle42"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle43 Solid {
+  translation 3.833406151505632 -0.27507224089670235 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle43"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle44 Solid {
+  translation -3.766016965210813 2.1111233935076505 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle44"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle45 Solid {
+  translation 2.581771981307285 0.6066442559380123 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle45"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle46 Solid {
+  translation 2.682575081550154 -0.06142359599253133 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle46"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle47 Solid {
+  translation 0.22505501088174107 -0.7173439182503589 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle47"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle48 Solid {
+  translation -4.638851061701331 1.3504630715114256 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle48"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle49 Solid {
+  translation -1.837875787344366 0.0848498425305575 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle49"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle50 Solid {
+  translation 4.0349080918683216 -2.482006931426138 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle50"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle51 Solid {
+  translation -0.8872090619472655 2.5299562715761823 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle51"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle52 Solid {
+  translation -2.6848981616329377 -4.18789889269495 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle52"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle53 Solid {
+  translation -2.081460616153697 -3.3539092561853563 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle53"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle54 Solid {
+  translation 4.254006758191474 3.050391757687728 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle54"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle55 Solid {
+  translation 1.3206971894531927 3.677459842858405 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle55"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle56 Solid {
+  translation 3.006353561301233 -3.1029564170282455 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle56"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle57 Solid {
+  translation 3.8863340850507795 0.389488194964942 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle57"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle58 Solid {
+  translation 3.0436575361242193 3.921303869242583 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle58"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle59 Solid {
+  translation -1.8017655977785476 -3.8604859471760005 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle59"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle60 Solid {
+  translation -2.6934418908347775 -0.7216328926000628 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle60"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle61 Solid {
+  translation 3.1483461826326815 3.5712327742378003 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle61"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle62 Solid {
+  translation -4.881173907741212 0.10639829551790037 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle62"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle63 Solid {
+  translation -0.8176310688270876 -2.7511326763397705 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle63"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle64 Solid {
+  translation -3.76333286339654 -1.6076098031040833 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle64"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle65 Solid {
+  translation 4.38480606873394 -1.7502909729945233 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle65"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle66 Solid {
+  translation 0.18602715525932467 2.009887693062261 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle66"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle67 Solid {
+  translation -1.3500669364449895 4.670642618937511 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle67"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle68 Solid {
+  translation 4.578228219926902 -2.457355271328895 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle68"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle69 Solid {
+  translation -0.027239791665383706 -1.9713047328139806 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle69"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle70 Solid {
+  translation -2.1300791056630706 -4.584819221190125 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle70"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle71 Solid {
+  translation 1.0846869064009788 0.026522329965728453 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle71"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle72 Solid {
+  translation -4.440360362625105 -2.191400004057547 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle72"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle73 Solid {
+  translation 4.041832271069871 -2.5783372823969732 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle73"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle74 Solid {
+  translation -3.5155407662968914 -0.10441767325212581 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle74"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle75 Solid {
+  translation 4.807939495694947 -2.553652812036146 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle75"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle76 Solid {
+  translation 1.7041419193181975 2.590034191754304 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle76"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle77 Solid {
+  translation -2.597388314475243 2.2593418512574095 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle77"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle78 Solid {
+  translation -1.308946986079393 1.3098277228764372 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle78"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle79 Solid {
+  translation 1.3219441365328573 0.3541693723401087 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle79"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle80 Solid {
+  translation -4.0561312764613575 3.3194947063334554 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle80"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle81 Solid {
+  translation -1.7742773567798151 -3.103466747041443 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle81"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle82 Solid {
+  translation -4.546326098607837 0.8998401375635936 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle82"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle83 Solid {
+  translation 1.757887182238596 -4.785780493614224 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle83"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle84 Solid {
+  translation 0.11972127716288128 -2.7076918255404143 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle84"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle85 Solid {
+  translation 1.4372106250535532 -3.2237723528505846 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle85"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle86 Solid {
+  translation 1.8902836072144131 -1.1213200716246798 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle86"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle87 Solid {
+  translation 4.3236268884936715 -3.5885426529546667 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle87"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle88 Solid {
+  translation -1.573443124602441 -3.8266121397181685 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle88"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle89 Solid {
+  translation -2.3963778856199593 1.5838420557383728 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle89"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle90 Solid {
+  translation 3.1404997819920366 0.5464880348346774 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle90"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle91 Solid {
+  translation 0.29354072572446377 -2.5556623200855286 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle91"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle92 Solid {
+  translation -4.0282825987215976 3.9324360037379344 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle92"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle93 Solid {
+  translation 3.964138765916972 1.3177044270053528 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle93"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle94 Solid {
+  translation -1.5936050686178636 -1.4928252113346572 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle94"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle95 Solid {
+  translation 2.2369612208153695 3.9313915735305125 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle95"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle96 Solid {
+  translation 3.832155600224662 2.7707679039904765 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle96"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle97 Solid {
+  translation 1.4061132969274492 -4.117014346549016 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle97"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle98 Solid {
+  translation -3.3498757304633235 3.945686466418084 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle98"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle99 Solid {
+  translation 1.0536476906299406 -4.858949188995367 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle99"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle100 Solid {
+  translation -3.9454317256262823 1.6186675141697524 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle100"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle101 Solid {
+  translation -4.899890319922435 -3.3580002909667632 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle101"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle102 Solid {
+  translation 0.4824645147292026 1.8997624571576637 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle102"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle103 Solid {
+  translation 1.5044164690757453 -2.729733836340458 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle103"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle104 Solid {
+  translation 2.100574291340605 -2.6012340337816795 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle104"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle105 Solid {
+  translation -1.7285429882232495 2.4402649106684393 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle105"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle106 Solid {
+  translation 1.4813657005674248 3.4573117638923625 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle106"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle107 Solid {
+  translation 1.5603676337733994 0.6762551730211692 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle107"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle108 Solid {
+  translation -4.022619798501885 -1.3096135497116084 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle108"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle109 Solid {
+  translation -2.324496559950918 -2.5345025305470728 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle109"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle110 Solid {
+  translation 4.682804492049212 -1.0583325257990719 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle110"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle111 Solid {
+  translation 3.881260896253422 1.2982723973729025 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle111"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle112 Solid {
+  translation 2.9186319050623197 0.026107221741401787 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle112"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle113 Solid {
+  translation 0.7613484578009553 -0.07407483119324709 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle113"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle114 Solid {
+  translation -3.0170944207993595 2.202275941088903 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle114"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle115 Solid {
+  translation -2.1703536118355276 -4.709271932328607 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle115"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle116 Solid {
+  translation 1.4401757294809618 -3.1966042738702156 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle116"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle117 Solid {
+  translation 4.10715746318244 -1.2854288674711007 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle117"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle118 Solid {
+  translation -4.796979496364212 4.240353769618481 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle118"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle119 Solid {
+  translation -0.7109769316585881 4.619882708532329 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle119"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle120 Solid {
+  translation 4.589837773183603 3.494793609126865 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle120"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle121 Solid {
+  translation -2.0349559685111016 -1.1375324868409398 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle121"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle122 Solid {
+  translation 3.4762530480168836 -1.812472148952851 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle122"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle123 Solid {
+  translation -3.2720218078076844 0.5623324983376667 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle123"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle124 Solid {
+  translation 4.3179322641917315 1.9406949870822325 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle124"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle125 Solid {
+  translation 0.6936055838847128 -3.987952711669392 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle125"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle126 Solid {
+  translation 1.1385715443217803 4.851533116032207 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle126"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle127 Solid {
+  translation -3.5631682491584122 0.18146355840099382 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle127"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle128 Solid {
+  translation 3.735993412086759 2.3836093157666243 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle128"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle129 Solid {
+  translation 1.9504558358531527 2.004592431472382 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle129"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle130 Solid {
+  translation -1.391037602924424 -2.0434407417815157 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle130"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle131 Solid {
+  translation 3.0626754392372844 3.0701226073238894 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle131"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle132 Solid {
+  translation 3.6340159539430266 4.091081470309066 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle132"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle133 Solid {
+  translation 0.1122897487232839 0.015011317403276436 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle133"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle134 Solid {
+  translation 2.9531222717710746 1.484642914699875 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle134"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle135 Solid {
+  translation 1.9994720848512628 2.9283474274174006 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle135"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle136 Solid {
+  translation 3.8610528839939073 -1.6038479471697955 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle136"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle137 Solid {
+  translation -1.2317287688645542 -4.019578795575397 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle137"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle138 Solid {
+  translation 0.7749733958621228 -4.594171489412253 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle138"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle139 Solid {
+  translation -0.34057962048864443 0.42218188360500886 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle139"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle140 Solid {
+  translation -2.1132416039299846 0.8992492796332066 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle140"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle141 Solid {
+  translation 3.1937455505306174 -1.3841126500284973 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle141"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle142 Solid {
+  translation -3.6921009247463408 0.2202082745425633 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle142"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle143 Solid {
+  translation 2.6729361756762477 -2.8133718277812525 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle143"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle144 Solid {
+  translation 1.2166157106081021 -4.105060096561697 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle144"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle145 Solid {
+  translation -4.438350960430784 0.31041085252466516 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle145"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle146 Solid {
+  translation 0.402287703940055 1.3605560248322446 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle146"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle147 Solid {
+  translation 2.2383042038543497 4.710935586679093 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle147"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle148 Solid {
+  translation 0.1613734481818332 -1.752730917881665 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle148"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle149 Solid {
+  translation 2.9223433282101663 -2.268760712505465 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle149"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle150 Solid {
+  translation -0.6041829350142027 -4.173281824711567 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle150"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle151 Solid {
+  translation -4.699027640186971 4.580219305311458 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle151"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle152 Solid {
+  translation 3.326203193070838 1.9401446403276097 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle152"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle153 Solid {
+  translation -0.9013658502987285 -3.234386231298627 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle153"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle154 Solid {
+  translation -3.401273277556248 -2.4725953081705065 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle154"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle155 Solid {
+  translation 0.4873439805905928 2.1244996347306175 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle155"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle156 Solid {
+  translation 1.5859540295055394 -2.178654420235166 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle156"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle157 Solid {
+  translation 4.5031662785656215 2.355179475288108 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle157"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle158 Solid {
+  translation 0.538105119862867 1.1060353877200875 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle158"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle159 Solid {
+  translation -0.79595938196488 -2.4974632039385414 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle159"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle160 Solid {
+  translation -1.4258704813525105 2.5526764935972546 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle160"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle161 Solid {
+  translation 3.519059781708971 2.0162128078622343 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle161"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle162 Solid {
+  translation -0.25567909203548034 -3.9814418095550854 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle162"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle163 Solid {
+  translation -0.08300283634335948 -0.26262946927240005 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle163"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle164 Solid {
+  translation -3.2353014878908497 -0.6548686725440671 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle164"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle165 Solid {
+  translation -1.0048031294660031 1.1469159707169432 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle165"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle166 Solid {
+  translation 1.3374271435896734 -4.50149030325676 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle166"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle167 Solid {
+  translation -1.241335115197935 1.2460131655709406 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle167"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle168 Solid {
+  translation 0.031048959942868493 3.52924942776439 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle168"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle169 Solid {
+  translation 1.5710669530275556 -3.3369491718938464 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle169"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle170 Solid {
+  translation -4.2513694007357445 1.409950854242525 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle170"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle171 Solid {
+  translation -4.687538025637944 0.8491782546072866 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle171"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle172 Solid {
+  translation 4.3582793901070795 0.7471943609712017 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle172"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle173 Solid {
+  translation -1.1071177305554332 1.4185533625792965 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle173"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle174 Solid {
+  translation -0.41329638413398495 0.4516062142277555 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle174"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle175 Solid {
+  translation 4.3705016068876 -1.127583885772335 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle175"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle176 Solid {
+  translation -3.0116677655859654 -4.263323121335862 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle176"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle177 Solid {
+  translation -4.015014688516309 1.8117670568219326 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle177"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle178 Solid {
+  translation -4.245232380243733 -1.7921412600917632 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle178"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle179 Solid {
+  translation 3.4142655785975995 -4.719607836215324 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle179"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle180 Solid {
+  translation 3.1132379776304644 -2.159637729743341 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle180"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle181 Solid {
+  translation -3.7801682065456035 1.947697937105091 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle181"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle182 Solid {
+  translation 1.2765341831208517 3.7369729339178237 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle182"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle183 Solid {
+  translation 2.3272033336584697 3.0044612108100006 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle183"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle184 Solid {
+  translation -2.1578577315440657 -3.1933485165807443 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle184"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle185 Solid {
+  translation 2.481086041244498 3.0376639187459142 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle185"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle186 Solid {
+  translation 4.856000905806666 -0.8650849985768776 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle186"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle187 Solid {
+  translation -1.2670209506514465 2.736488311345769 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle187"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle188 Solid {
+  translation -1.5760449514951236 4.264497523475291 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle188"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle189 Solid {
+  translation 3.5482862432458164 -0.7029591289873185 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle189"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle190 Solid {
+  translation 2.4836235711358237 2.5199744534383557 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle190"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle191 Solid {
+  translation -3.9290736985242676 3.98527377612771 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle191"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle192 Solid {
+  translation 0.05199848723378597 3.231928914466642 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle192"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle193 Solid {
+  translation -1.7815089497969439 3.9156799621123843 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle193"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle194 Solid {
+  translation -1.0969033805317854 -4.842707250345047 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle194"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle195 Solid {
+  translation 4.0132815665507104 -4.046261899817278 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle195"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle196 Solid {
+  translation -1.7887949878548928 4.455613473802969 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle196"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle197 Solid {
+  translation 4.461010754681806 0.7270350924205324 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle197"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle198 Solid {
+  translation 1.305188400481013 -0.5103893324146345 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle198"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle199 Solid {
+  translation -2.0472133601891613 -1.696221000837832 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle199"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle200 Solid {
+  translation 1.7079327151626806 2.4985078414330326 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle200"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle201 Solid {
+  translation 2.8866325328859004 2.8672196136660837 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle201"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle202 Solid {
+  translation -4.047059579817965 -0.055238983444443335 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle202"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle203 Solid {
+  translation -4.380168275835222 0.49033593500498185 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle203"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle204 Solid {
+  translation -0.578848036403568 3.8382714093071675 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle204"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle205 Solid {
+  translation -1.475941375734421 -3.7910365373667023 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle205"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle206 Solid {
+  translation -3.5343823476769254 2.5889552540029754 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle206"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle207 Solid {
+  translation 1.1703588268309844 -3.948885506384377 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle207"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle208 Solid {
+  translation -4.1173426194615255 1.989594401445288 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle208"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle209 Solid {
+  translation -4.229646236994484 3.186414586974526 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle209"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle210 Solid {
+  translation 2.041798048849312 -4.144647071645193 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle210"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle211 Solid {
+  translation -4.1101066305566 4.817731827161636 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle211"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle212 Solid {
+  translation -1.2447191220144087 -1.2806427440377801 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle212"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle213 Solid {
+  translation 3.0967157158492755 4.427760916100202 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle213"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle214 Solid {
+  translation 4.811410531846422 2.5084440340635226 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle214"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle215 Solid {
+  translation -1.2250301032439341 -4.123342904683179 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle215"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle216 Solid {
+  translation 2.743754467681624 0.5782020723844701 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle216"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle217 Solid {
+  translation -0.7502021084549346 4.022908412437887 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle217"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle218 Solid {
+  translation -3.849144925169102 -0.07301146752049448 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle218"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle219 Solid {
+  translation -4.837598916802551 -0.3102596442581502 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle219"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle220 Solid {
+  translation -3.7864901569066616 1.4771819909490294 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle220"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle221 Solid {
+  translation 2.4358443047276905 0.8253507744618807 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle221"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle222 Solid {
+  translation 4.575508229897966 -1.2387812627153298 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle222"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle223 Solid {
+  translation -2.121450345809579 3.649131369075657 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle223"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle224 Solid {
+  translation -2.736401198657419 4.585903140462052 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle224"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle225 Solid {
+  translation -4.829670700570818 4.651800384405626 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle225"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle226 Solid {
+  translation -4.522716871689297 3.8723168256109046 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle226"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle227 Solid {
+  translation 0.274240979954369 4.880351481581074 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle227"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle228 Solid {
+  translation -4.219414009119552 0.5331574155730756 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle228"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle229 Solid {
+  translation 4.64609510262908 0.22866865728447294 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle229"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle230 Solid {
+  translation 1.2810465175390995 1.93791202094771 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle230"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle231 Solid {
+  translation -0.45004345879904495 1.2628249928322282 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle231"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle232 Solid {
+  translation 0.8347116880386922 3.971464303860791 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle232"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle233 Solid {
+  translation -4.500080834619567 -2.16846442303692 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle233"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle234 Solid {
+  translation -0.43899814742144194 1.1893127182352137 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle234"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle235 Solid {
+  translation -2.2039262884867865 -3.087600518734763 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle235"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle236 Solid {
+  translation -0.35938579109417645 -1.4518129425420772 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle236"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle237 Solid {
+  translation 0.8281955073236338 -4.18042709404665 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle237"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle238 Solid {
+  translation 1.961800968795477 0.3573540268067923 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle238"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle239 Solid {
+  translation -1.8856765987653552 3.1065706950987915 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle239"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle240 Solid {
+  translation 1.8288386082834052 -3.3400923004855763 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle240"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle241 Solid {
+  translation 4.068179126489041 3.1931187049393737 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle241"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle242 Solid {
+  translation 4.453019141590048 2.2346231330447637 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle242"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle243 Solid {
+  translation 1.1228104397643195 -0.809393940722873 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle243"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle244 Solid {
+  translation 4.284011985204731 3.6240325060540437 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle244"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle245 Solid {
+  translation -1.2230126679073092 3.0744779747401454 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle245"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle246 Solid {
+  translation 4.82403368021795 -3.460872778075071 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle246"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle247 Solid {
+  translation 0.9318940819861377 -1.179180519352887 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle247"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle248 Solid {
+  translation 4.6521525383645725 3.386977339043516 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle248"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle249 Solid {
+  translation 3.3494541766402657 -0.3099377180297944 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle249"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle250 Solid {
+  translation -0.8432869268571146 -2.2432699878860083 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle250"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle251 Solid {
+  translation -4.391882583155821 3.6107515249250275 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle251"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle252 Solid {
+  translation 3.097719990387769 4.947204965532692 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle252"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle253 Solid {
+  translation 4.916704687031664 0.5487738854660114 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle253"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle254 Solid {
+  translation 2.6629754102870544 4.403180725836038 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle254"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle255 Solid {
+  translation 3.4615091677063736 -2.5012537927423435 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle255"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle256 Solid {
+  translation -0.4896130604300746 -3.6713217900001998 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle256"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle257 Solid {
+  translation 4.495105169861351 1.051128881063712 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle257"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle258 Solid {
+  translation -2.686436225515719 1.6998367756179817 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle258"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle259 Solid {
+  translation 1.1694695805331685 -1.404189091474879 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle259"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle260 Solid {
+  translation -3.825779837223673 1.6985746363687158 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle260"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle261 Solid {
+  translation 0.20104623894755402 2.6959520781828292 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle261"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle262 Solid {
+  translation 0.19961866100873493 3.4865968531535474 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle262"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle263 Solid {
+  translation 0.5138777038674069 0.6032859182003243 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle263"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle264 Solid {
+  translation 3.728870666317616 -0.9555196244972692 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle264"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle265 Solid {
+  translation 2.5258588311688284 1.1910645583993 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle265"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle266 Solid {
+  translation 2.020389704182313 -2.8416548010617837 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle266"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle267 Solid {
+  translation -1.47918316781469 0.8901850998608678 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle267"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle268 Solid {
+  translation -1.0667839535126502 -0.618998271965082 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle268"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle269 Solid {
+  translation 4.00117107548811 -1.5022708764693267 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle269"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle270 Solid {
+  translation 0.13849594268212684 2.8081648261373164 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle270"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle271 Solid {
+  translation -1.0242264550194253 1.2086583322559479 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle271"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle272 Solid {
+  translation 3.5874007165927777 4.450254174210657 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle272"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle273 Solid {
+  translation -3.4939725388025247 4.223217489098794 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle273"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle274 Solid {
+  translation -0.07804869851257212 -2.3933805558403125 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle274"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle275 Solid {
+  translation -0.40455601324121293 4.752322495326223 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle275"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle276 Solid {
+  translation -0.07308086947059067 -1.6953590581536688 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle276"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle277 Solid {
+  translation 1.320668457735585 -2.572558374095889 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle277"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle278 Solid {
+  translation -4.198953051724227 -3.674090753084573 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle278"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle279 Solid {
+  translation -3.682346194318053 -3.4461633342282862 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle279"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle280 Solid {
+  translation -3.5756109907708398 1.3946599735518248 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle280"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle281 Solid {
+  translation -3.1493871644484663 -1.5278938950937544 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle281"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle282 Solid {
+  translation 3.928205258069517 -0.25777976139756387 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle282"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle283 Solid {
+  translation 1.658821611358169 -3.244033275103865 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle283"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle284 Solid {
+  translation -3.0463387137941593 -4.54540069896186 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle284"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle285 Solid {
+  translation -3.277542875585571 -2.1919556435836096 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle285"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle286 Solid {
+  translation -3.197596205660207 -4.0718449158051495 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle286"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle287 Solid {
+  translation -3.755704876104052 -0.3882901964760146 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle287"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle288 Solid {
+  translation -2.9072961877826544 -1.3437283756240528 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle288"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle289 Solid {
+  translation 0.033830981463083276 1.8849088034307169 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle289"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle290 Solid {
+  translation -4.560809815573121 2.9641629491995225 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle290"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle291 Solid {
+  translation 1.266213855959987 -4.1405855837061685 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle291"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle292 Solid {
+  translation 3.698428378657094 4.166636765264951 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle292"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle293 Solid {
+  translation -4.345328197436849 -2.208911283342683 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle293"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle294 Solid {
+  translation 3.031392669951307 2.4577709347982175 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle294"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle295 Solid {
+  translation -3.1232419083718646 -2.8774416989665683 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle295"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle296 Solid {
+  translation -1.2823261823653183 -0.15322244660888895 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle296"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle297 Solid {
+  translation 1.1707222381499296 -1.297754968259253 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle297"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle298 Solid {
+  translation -0.3709063102818355 2.4499622875241895 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle298"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle299 Solid {
+  translation -4.586836291383081 -2.4508742509941945 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle299"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle300 Solid {
+  translation 2.112160900257069 3.9125476931032734 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle300"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle301 Solid {
+  translation 0.1156066769450943 0.3179235041266253 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle301"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle302 Solid {
+  translation -3.888997087736217 -0.5206175684477987 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle302"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle303 Solid {
+  translation 0.32291093790472924 -2.5495420140161764 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle303"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle304 Solid {
+  translation -2.2844920136011284 -1.2148867852642358 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle304"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle305 Solid {
+  translation -4.751295142000509 -1.7614162607265351 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle305"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle306 Solid {
+  translation -2.856664730734208 -1.707776213438645 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle306"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle307 Solid {
+  translation -3.7643548949894132 3.86622007932496 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle307"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle308 Solid {
+  translation 0.9265652901850814 1.7731129595304473 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle308"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle309 Solid {
+  translation 2.862795262212649 -0.015422230602332831 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle309"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle310 Solid {
+  translation -4.089489147934506 0.36735476400362277 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle310"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle311 Solid {
+  translation 0.8597270684067038 2.4298507944248673 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle311"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle312 Solid {
+  translation -0.6765704923261744 -3.686955002323919 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle312"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle313 Solid {
+  translation -2.1406185325926277 -1.3554852656535128 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle313"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle314 Solid {
+  translation 1.4445806891828523 0.7007052162222278 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle314"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle315 Solid {
+  translation -1.424642413611322 4.8165009630504985 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle315"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle316 Solid {
+  translation 1.047170711633183 -2.6014547618136548 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle316"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle317 Solid {
+  translation -3.942353521058003 -3.436694522075113 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle317"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle318 Solid {
+  translation -2.5150184889933698 -3.359254404730399 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle318"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle319 Solid {
+  translation -3.102986461892073 -2.1275578299309137 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle319"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle320 Solid {
+  translation -3.2336014065819274 3.92797770380161 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle320"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle321 Solid {
+  translation -4.155685917949742 0.2426627567455215 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle321"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle322 Solid {
+  translation -0.8870714128023511 4.775548307395204 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle322"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle323 Solid {
+  translation -3.840814868536282 -1.011229569447158 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle323"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle324 Solid {
+  translation 3.139013502397872 -2.396762012255096 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle324"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle325 Solid {
+  translation -3.2582128848383487 1.6695678772518665 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle325"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle326 Solid {
+  translation 4.250822292363099 0.5619526408379052 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle326"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle327 Solid {
+  translation 0.7089656257520085 -2.1782069727631868 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle327"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle328 Solid {
+  translation 2.6679800386001755 -3.0982668892805187 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle328"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle329 Solid {
+  translation -1.7455755595979876 -0.7381792576974737 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle329"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle330 Solid {
+  translation 0.07534274897610516 -2.550143649090706 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle330"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle331 Solid {
+  translation -3.813115435081885 1.0951384201721623 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle331"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle332 Solid {
+  translation -2.092557522921468 0.8042583920838613 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle332"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle333 Solid {
+  translation -3.421809118785397 -0.18671299163730737 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle333"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle334 Solid {
+  translation 0.32263538226070043 -4.436946985457974 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle334"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle335 Solid {
+  translation -1.6176176458801863 -3.619294698304155 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle335"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle336 Solid {
+  translation -4.3225877923196 4.850606300660458 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle336"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle337 Solid {
+  translation -1.7586969347502426 3.067757013960885 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle337"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle338 Solid {
+  translation -2.429057517838738 1.7968769500169 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle338"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle339 Solid {
+  translation 2.576255812907897 0.9468235320176586 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle339"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle340 Solid {
+  translation -0.28139573335343204 -0.8727749499420412 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle340"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle341 Solid {
+  translation -1.4962041612243464 4.252338528053476 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle341"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle342 Solid {
+  translation 3.2731321370985187 4.603766415598474 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle342"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle343 Solid {
+  translation -3.7194574874931075 2.285588004516078 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle343"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle344 Solid {
+  translation 4.339570522528274 -3.1557926449599645 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle344"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle345 Solid {
+  translation -4.291686953068903 2.3870944279715847 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle345"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle346 Solid {
+  translation 0.7372838204811281 3.384104889906893 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle346"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle347 Solid {
+  translation -3.566253471399734 2.9231463874129133 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle347"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle348 Solid {
+  translation -2.953889531527329 -3.3298061656295257 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle348"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle349 Solid {
+  translation -3.32376860048317 3.1142897302906833 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle349"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle350 Solid {
+  translation 1.6354524848923813 0.22834770521428105 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle350"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle351 Solid {
+  translation -1.3975782071773253 3.7342853540497716 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle351"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle352 Solid {
+  translation -1.0647934365159095 3.1343344507686135 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle352"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle353 Solid {
+  translation -0.6025644051548378 -1.2182501486934152 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle353"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle354 Solid {
+  translation -0.36947012187089623 -1.9663590457749933 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle354"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle355 Solid {
+  translation 2.451332863744886 0.026931861915543642 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle355"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle356 Solid {
+  translation -2.6510943180465087 3.955788275418228 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle356"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle357 Solid {
+  translation -1.149476908405207 0.43117332502848704 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle357"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle358 Solid {
+  translation 4.024073898549015 1.2299561595485216 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle358"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle359 Solid {
+  translation -3.792709396987196 4.354338023773404 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle359"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle360 Solid {
+  translation 1.2643097254070366 -1.6344344148948475 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle360"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle361 Solid {
+  translation -3.5712064806324664 2.91084937377593 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle361"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle362 Solid {
+  translation 1.1887202836922839 0.33126481056558266 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle362"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle363 Solid {
+  translation 3.8995365722044815 2.857112391122855 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle363"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle364 Solid {
+  translation -3.4484186906457635 -1.8639515288240727 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle364"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle365 Solid {
+  translation -2.4899575158367893 2.415068296469502 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle365"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle366 Solid {
+  translation -4.618028896115784 0.6919078802260339 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle366"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle367 Solid {
+  translation 2.5983409888328364 3.72997980394132 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle367"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle368 Solid {
+  translation -1.5633906877125163 3.180447316252928 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle368"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle369 Solid {
+  translation -3.8547458041434486 3.4298776881717297 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle369"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle370 Solid {
+  translation -3.6878622429133743 -1.0168558234523641 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle370"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle371 Solid {
+  translation 2.9432241212175807 -3.4658174692471397 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle371"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle372 Solid {
+  translation -2.6804111871968495 2.2003004270913564 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle372"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle373 Solid {
+  translation 2.1783617118061365 1.3973615655644434 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle373"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle374 Solid {
+  translation 1.9200896002242906 0.42297198914120226 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle374"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle375 Solid {
+  translation -2.4571893168211676 -1.5276096643111976 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle375"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle376 Solid {
+  translation -3.152182603665886 4.04366055720292 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle376"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle377 Solid {
+  translation 0.8255787681845925 -0.9815709740399652 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle377"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle378 Solid {
+  translation -0.37614254392308677 4.428105062156972 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle378"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle379 Solid {
+  translation -3.431821109150806 0.853675336966293 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle379"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle380 Solid {
+  translation 0.05829792095621311 1.1033969308030134 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle380"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle381 Solid {
+  translation -4.770709180173679 3.6840266985470995 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle381"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle382 Solid {
+  translation 4.277970996587762 0.6448185175331682 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle382"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle383 Solid {
+  translation 1.9468431563812336 4.182743873655228 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle383"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle384 Solid {
+  translation 2.051662479702647 -3.4398634751488126 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle384"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle385 Solid {
+  translation 0.7552547656514506 1.0564789591902732 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle385"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle386 Solid {
+  translation -0.751106354106378 2.3407979326847563 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle386"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle387 Solid {
+  translation -0.4866902230990924 -3.828943346176523 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle387"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle388 Solid {
+  translation 4.799927869727113 3.3550910558147473 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle388"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle389 Solid {
+  translation -3.715839456087658 4.166334637911986 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle389"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle390 Solid {
+  translation 3.661973984415071 0.18649676554811379 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle390"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle391 Solid {
+  translation 0.9036268138747996 -0.9998732316857106 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle391"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle392 Solid {
+  translation -4.40785977566189 -1.6315473077055809 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle392"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle393 Solid {
+  translation 2.998249141120313 -4.904142972254432 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle393"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle394 Solid {
+  translation -1.6483582002576727 -1.0081299334496614 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle394"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle395 Solid {
+  translation 0.3702164690854364 4.156570602486329 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle395"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle396 Solid {
+  translation -1.5211746557769836 -1.515163301227346 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle396"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle397 Solid {
+  translation 2.351262356286509 -0.4730423851909089 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle397"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle398 Solid {
+  translation -2.7264122528941788 -0.4708487902863352 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle398"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle399 Solid {
+  translation -3.5555154982399815 -3.2037688335883896 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle399"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle400 Solid {
+  translation -0.016159049879150622 -0.8026380499049761 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle400"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle401 Solid {
+  translation 4.106974420574191 -1.3623003987453322 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle401"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle402 Solid {
+  translation 0.7978246677526304 1.3094164504033508 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle402"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle403 Solid {
+  translation -4.820364879775497 1.619019982965435 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle403"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle404 Solid {
+  translation -3.1874439279894613 4.5645961429476065 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle404"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle405 Solid {
+  translation -3.478238995244182 -0.8452211751024654 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle405"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle406 Solid {
+  translation -4.105038286021426 4.919055093274879 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle406"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle407 Solid {
+  translation 0.02173060227930179 0.9443116714684336 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle407"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle408 Solid {
+  translation -4.285942873854568 2.47460865695186 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle408"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle409 Solid {
+  translation -2.871934628353701 3.9407374654630667 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle409"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle410 Solid {
+  translation -2.919117559228129 -3.0621915654297007 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle410"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle411 Solid {
+  translation -4.588158288303861 -0.27653724341100716 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle411"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle412 Solid {
+  translation 0.6419272192999026 -4.299484469659312 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle412"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle413 Solid {
+  translation 2.7277234052806048 -0.46244053599452695 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle413"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle414 Solid {
+  translation 0.2414636663430425 -0.5864488053115418 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle414"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle415 Solid {
+  translation -0.9824456973342728 0.5904392799513571 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle415"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle416 Solid {
+  translation -3.4131215652859463 -3.148911508096816 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle416"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle417 Solid {
+  translation 3.581677648033822 4.416543075122964 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle417"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle418 Solid {
+  translation -1.2542377688304458 -2.2696277358788177 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle418"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle419 Solid {
+  translation 1.4255954780662563 -0.9035317061288453 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle419"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle420 Solid {
+  translation -4.698675078962586 -3.404089286074716 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle420"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle421 Solid {
+  translation 2.138125065589236 1.5733470249104986 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle421"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle422 Solid {
+  translation -4.681749674215514 -2.7524755968638006 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle422"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle423 Solid {
+  translation -2.6623595137780933 1.7017381616274116 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle423"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle424 Solid {
+  translation 2.969169245194575 -3.1824078456620972 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle424"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle425 Solid {
+  translation 1.5121864677335592 -2.5919904676374075 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle425"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle426 Solid {
+  translation -3.9655302116824833 -2.5425953091054048 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle426"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle427 Solid {
+  translation 2.200442625371026 3.5213950342522287 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle427"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle428 Solid {
+  translation 3.2691766592132163 -1.0178830567772974 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle428"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle429 Solid {
+  translation 1.6640428520493975 -2.9206554753833727 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle429"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle430 Solid {
+  translation -2.0478374704159688 3.9237246033590862 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle430"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle431 Solid {
+  translation -2.8919260740543296 -4.687331181649185 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle431"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle432 Solid {
+  translation -3.153789192611007 0.8221114535999527 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle432"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle433 Solid {
+  translation -0.77789694913427 3.8874499396620505 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle433"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle434 Solid {
+  translation 3.1426912612105644 -1.566008218191028 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle434"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle435 Solid {
+  translation -2.3817080090302043 -1.1910451591440578 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle435"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle436 Solid {
+  translation 0.8939199308965966 -2.296169955853525 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle436"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle437 Solid {
+  translation 1.229074187706427 -0.8968246433067195 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle437"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle438 Solid {
+  translation 0.5152670904346044 -0.632347361560365 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle438"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle439 Solid {
+  translation -2.0347889805350152 4.439687738925351 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle439"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle440 Solid {
+  translation 2.609697362181632 -3.56287955991212 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle440"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle441 Solid {
+  translation 3.6478329613893363 -0.12443113732981459 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle441"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle442 Solid {
+  translation 3.906067046251505 2.968567033878421 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle442"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle443 Solid {
+  translation -0.7403863057545887 -4.727553847630838 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle443"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle444 Solid {
+  translation -2.2900941420890337 0.41217872514258236 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle444"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle445 Solid {
+  translation 1.3214343762788578 -2.3969119142112976 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle445"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle446 Solid {
+  translation -3.570374866679041 3.3158093443130605 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle446"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle447 Solid {
+  translation 4.795581588965166 0.25433280479659004 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle447"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle448 Solid {
+  translation -3.2503750701017955 -2.2541574674582474 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle448"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle449 Solid {
+  translation -4.767932302180079 4.1015581849489395 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle449"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle450 Solid {
+  translation -3.784264279387603 0.7575131075911106 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle450"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle451 Solid {
+  translation -2.2368533151966608 0.5363622249063544 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle451"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle452 Solid {
+  translation 1.4990618446834558 3.2644438567012957 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle452"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle453 Solid {
+  translation -2.9064294095700283 -4.841141296281044 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle453"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle454 Solid {
+  translation -3.594832262318808 3.96018455429624 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle454"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle455 Solid {
+  translation 3.701511767868902 0.964389711486052 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle455"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle456 Solid {
+  translation 0.9951169182931681 1.6338630780079297 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle456"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle457 Solid {
+  translation -3.2138243416278494 4.102678264657102 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle457"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle458 Solid {
+  translation -0.804171803568476 -1.1569285703299754 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle458"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle459 Solid {
+  translation 0.1872852823000919 -4.485036928926955 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle459"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle460 Solid {
+  translation -3.3037946493148143 2.356532802621068 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle460"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle461 Solid {
+  translation -4.130293187541248 1.0212058837172435 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle461"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle462 Solid {
+  translation -2.5210438141549227 -1.095973420984432 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle462"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle463 Solid {
+  translation -2.0919320059700715 -1.4288401069970038 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle463"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle464 Solid {
+  translation 2.168554461324031 -2.0084950153305674 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle464"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle465 Solid {
+  translation 0.6574059389392826 -0.2371010182289135 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle465"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle466 Solid {
+  translation 1.620344537090217 4.324614419315105 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle466"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle467 Solid {
+  translation 2.3024637623814783 -2.8220902519515083 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle467"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle468 Solid {
+  translation -4.641286962893282 -2.353585961431732 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle468"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle469 Solid {
+  translation 0.9412715139325227 -4.440884446505922 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle469"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle470 Solid {
+  translation -0.03597415270776061 0.9587442042772034 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle470"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle471 Solid {
+  translation -1.640985480912088 2.6820308170836373 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle471"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle472 Solid {
+  translation 2.259068686415673 -0.04463596955863558 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle472"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle473 Solid {
+  translation 1.865183724634587 -0.6452093478229122 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle473"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle474 Solid {
+  translation -2.510619870932843 3.159112944974578 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle474"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle475 Solid {
+  translation 2.964217201792895 1.927495061458825 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle475"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle476 Solid {
+  translation -2.2557631414233694 0.8932836020039625 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle476"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle477 Solid {
+  translation -1.3763584202937347 -4.043337474066322 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle477"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle478 Solid {
+  translation 4.131404397076204 -3.595495553902282 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle478"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle479 Solid {
+  translation 4.457349802825944 -0.5345428477162386 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle479"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle480 Solid {
+  translation -3.1171840044976653 0.4148193790457455 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle480"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle481 Solid {
+  translation 3.692163775176442 2.2990263754546554 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle481"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle482 Solid {
+  translation 3.0349553638283524 1.5719553304361016 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle482"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle483 Solid {
+  translation 1.9035379887267396 3.4570369504966605 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle483"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle484 Solid {
+  translation -2.478286712294059 -0.10469285993290889 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle484"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle485 Solid {
+  translation -2.7600265259859382 4.827913279166805 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle485"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle486 Solid {
+  translation 4.396187462897472 -4.559674567451792 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle486"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle487 Solid {
+  translation 2.035194207905316 4.209958342415091 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle487"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle488 Solid {
+  translation -3.1623040832393983 0.672657782471032 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle488"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle489 Solid {
+  translation 4.1133341461216135 -4.613934812000592 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle489"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle490 Solid {
+  translation 1.9544606457437155 -2.0062448270117477 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle490"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle491 Solid {
+  translation 4.3982382422229955 -0.25527925509110894 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle491"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle492 Solid {
+  translation 3.5842222447942023 3.411039045497197 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle492"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle493 Solid {
+  translation -1.790905314891769 3.256263194091706 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle493"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle494 Solid {
+  translation -4.583624416316623 0.953071796972325 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle494"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle495 Solid {
+  translation -2.6729125108517398 -3.7563878308049397 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle495"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle496 Solid {
+  translation -4.188163303870829 1.943258881193584 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle496"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle497 Solid {
+  translation -1.585237858696145 2.2251910381347386 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle497"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle498 Solid {
+  translation -4.30297222609047 -1.8286256554769578 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle498"
+  boundingObject USE OBS_GEOM
+}
+DEF obstacle499 Solid {
+  translation 0.3909637945158382 2.8781593319057395 0.05
+  children [
+    USE OBS_GEOM
+  ]
+  name "obstacle499"
+  boundingObject USE OBS_GEOM
+}
