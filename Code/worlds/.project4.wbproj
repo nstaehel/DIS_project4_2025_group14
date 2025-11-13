@@ -6,6 +6,7 @@ maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: 0 "controllers/e-puck/e-puck.c"
+globalOptionalRendering: CoordinateSystem
 consoles: Console:All:All
 renderingDevicePerspectives: e-puck0:camera;1;1;0;0
 renderingDevicePerspectives: e-puck1:camera;1;1;0;0
