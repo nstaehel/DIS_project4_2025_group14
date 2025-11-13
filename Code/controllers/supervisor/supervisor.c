@@ -14,6 +14,8 @@
 #include <memory>
 #include <time.h>       /* time_t, struct tm, difftime, time, mktime */
 
+using namespace std;
+
 #include <webots/robot.h>
 #include <webots/supervisor.h>
 #include "Point2d.h"
@@ -40,13 +42,38 @@
 
 WbNodeRef g_event_nodes[MAX_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
-// Event class
-class Event {
 
-  // Public variables
-  public:
-  uint16_t id_;          //event id
-  Point2d pos_;          //event pos
+double gauss(void) {
+  double x1, x2, w;
+  do {
+      x1 = 2.0 * RAND - 1.0;
+      x2 = 2.0 * RAND - 1.0;
+      w = x1*x1 + x2*x2;
+  } while (w >= 1.0);
+
+  w = sqrt((-2.0 * log(w))/w);
+  return(x1*w);
+}
+
+double* rand_coord(double radius) {
+  double* array (double*)malloc(2 * sizeof(double));
+  do{ 
+  double rand_x=-0.625 + 1.25*RAND;
+  double rand_y=-0.625 + 1.25*RAND;
+  } while((rand_x<=-0.25 + radius && (rand_y>0.005+radius || rand_y<-0.005-radius))||((rand_x>0.125-0.005-radius&&rand_x<0.125+0.005+radius)&&(rand_y>=-0.225-radius)));
+  array[0]=rand_x;
+  array[1]=rand_y;
+  return array;
+}
+
+double expovariate(double mu) {
+  double uniform = RAND;
+  while (uniform < 1e-7) uniform = RAND;
+  return -log(uniform) * mu;
+}
+
+// Event class
+class Event {*
   WbNodeRef node_;       //event node ref
   uint16_t assigned_to_; //id of the robot that will handle this event
   uint16_t event_type;
