@@ -94,7 +94,7 @@ double expovariate(double mu) {
 class Event {*
   WbNodeRef node_;       //event node ref
   uint16_t assigned_to_; //id of the robot that will handle this event
-  uint16_t event_type;
+  uint16_t event_type; // type of event ( A is 0, B is 1)
 
   // Auction data
   uint64_t t_announced_;        //time at which event was announced to robots
@@ -248,6 +248,7 @@ private:
       assert(event_state != MSG_EVENT_INVALID && 
              event_state != MSG_EVENT_GPS_ONLY);
       msg->event_id = event->id_;
+	  msg->event_type = event->event_type;
       msg->event_x = event->pos_.x;
       msg->event_y = event->pos_.y;
       msg->event_index = event->bidder_index;
