@@ -26,7 +26,6 @@ using namespace std;
 
 #define NUM_ROBOTS_A 2              
 #define NUM_ROBOTS_B 3  
-<<<<<<< HEAD
 #define NUM_EVENTS 10
 
 #define PROB_EVENTA 1/3
