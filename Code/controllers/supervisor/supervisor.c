@@ -119,6 +119,7 @@ class Event {*
     event_node_pos[2] = .01;
     
     double color[3];
+	  
     if(event_type==EVENT_TYPEA){
     	color[0]=1.0;
     	color[1]=0.0;
@@ -179,14 +180,10 @@ class Event {*
     bids_in_.reset();
 
     // we give the new position 
-    pos_ = rand_coord(); // Assuming you fixed rand_coord() to return Point2d
-
-    // assign A or B based on prob
-    if (RAND < PROB_EVENTA) {
-        event_type = 0; // TASK_A
-    } else {
-        event_type = 1; // TASK_B
-    }
+    pos_ = rand_coord(); 
+	  
+	// define if it's task A or B
+    event_type = event_type_assignment()
 
 	// we assign position and then the color
     double event_node_pos[3];
