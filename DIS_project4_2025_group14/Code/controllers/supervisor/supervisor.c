@@ -34,17 +34,13 @@ using namespace std;
 
 #define EVENT_TYPE A 0
 #define EVENT_TYPE B 1
-=======
-
->>>>>>> d5ee21ecdd3e013a9afbd920cc576ee018a05641
-
+	
 #define STEP_SIZE 64            // simulation step size
 
 #define EVENT_RANGE (0.1)      // distance within which a robot must come to do event
 
 #define GPS_INTERVAL (500)
 
-<<<<<<< HEAD
 #define MAX_SPEED 0.5
 
 #define TIME_ROBA_TASKA 3*1000
