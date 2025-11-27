@@ -31,8 +31,8 @@ using namespace std;
 #define PROB_EVENTA 1/3
 #define PROB_EVENTB 2/3
 
-#define EVENT_TYPE A 0
-#define EVENT_TYPE B 1
+#define EVENT_TYPE_A 0
+#define EVENT_TYPE_B 1
 
 #define STEP_SIZE 64            // simulation step size
 
@@ -168,9 +168,9 @@ class Event {*
     g_event_nodes_free.push_back(node_);
   }
 
-  void reinitialize(uint16_t new_id, uint64_t current_clk) {
+  void reinitialize(Supervisor* sup, uint64_t current_clk) {
     // we assign a new id and we clear/reset the data
-    id_ = new_id;
+    id_ = sup->getNextEventId();
     assigned_to_ = (uint16_t) -1; 
     t_announced_ = (uint64_t) -1;
     best_bidder_ = (uint16_t) -1;
@@ -324,7 +324,8 @@ private:
           event->id_);
         num_events_handled_++;
         event->markDone(clock_);
-        num_active_events_--;
+		  // reinitialize with a new id
+        event->reinitialize(this, clock_);
         event_queue.emplace_back(event.get(), MSG_EVENT_DONE);
       }
     }
@@ -382,7 +383,13 @@ private:
 // Public fucntions
 public:
   Supervisor() : events_(MAX_EVENTS){}
-  
+
+
+// function to get the next ID and atomically increment the counter that will be used in the reinitialize (since itself can't access the id)
+   uint16_t getNextEventId() {
+	  return next_event_id_++;
+   }
+
   // Reset robots & events
   void reset() {
     clock_ = 0;
