@@ -166,6 +166,50 @@ class Event {*
                                      event_node_pos);
     g_event_nodes_free.push_back(node_);
   }
+
+  void reinitialize(uint16_t new_id, uint64_t current_clk) {
+    // we assign a new id and we clear/reset the data
+    id_ = new_id;
+    assigned_to_ = (uint16_t) -1; 
+    t_announced_ = (uint64_t) -1;
+    best_bidder_ = (uint16_t) -1;
+    best_bid_ = 0.0;
+    t_done_ = (uint64_t) -1;
+    bidder_index = 0;
+    bids_in_.reset();
+
+    // we give the new position 
+    pos_ = rand_coord(); // Assuming you fixed rand_coord() to return Point2d
+
+    // assign A or B based on prob
+    if (RAND < PROB_EVENTA) {
+        event_type = 0; // TASK_A
+    } else {
+        event_type = 1; // TASK_B
+    }
+
+	// we assign position and then the color
+    double event_node_pos[3];
+    event_node_pos[0] = pos_.x;
+    event_node_pos[1] = pos_.y;
+    event_node_pos[2] = .01; 
+    
+    double color[3];
+    if(event_type==EVENT_TYPEA){
+    	color[0]=1.0;
+    	color[1]=0.0;
+    	color[2]=0.0;
+	} else {
+    	color[0]=0.0;
+    	color[1]=0.0;
+    	color[2]=1.0;
+	}
+    wb_supervisor_field_set_sf_vec3f(
+      wb_supervisor_node_get_field(node_,"translation"),
+      event_node_pos);
+	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
+  }
+
 };
 
 // Supervisor class
