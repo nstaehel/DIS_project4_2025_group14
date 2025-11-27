@@ -57,12 +57,6 @@ using namespace std;
 #define TOTAL_EVENTS_ALWAYS 10         // number of active events
 #define MAX_RUNTIME (3*60*1000)      // ...total runtime after which simulation stops
 #define ACTIVITY_TIME_MAX (2*60*1000) //Time spent doing tasks or moving
-=======
-
-#define TOTAL_EVENTS_ALWAYS 10         // number of active events
-#define MAX_RUNTIME (3*60)      // ...total runtime after which simulation stops
-#define ACTIVITY_TIME_MAX (2*60) //Time spent doing tasks or moving
->>>>>>> d5ee21ecdd3e013a9afbd920cc576ee018a05641
 
 
 WbNodeRef g_event_nodes[MAX_EVENTS];
@@ -80,33 +74,22 @@ double gauss(void) {
   return(x1*w);
 }
 
-<<<<<<< HEAD
 double* rand_coord() {
   double* array (double*)malloc(2 * sizeof(double));
   do{ 
   double rand_x=-0.575 + 1.15*RAND;
   double rand_y=-0.575 + 1.15*RAND;
   } while((rand_x<=-0.30 && (rand_y>0.055 || rand_y<-0.055))||((rand_x>0.07&&rand_x<0.18)&&(rand_y>=-0.275)));
-=======
-double* rand_coord(double radius) {
-  double* array (double*)malloc(2 * sizeof(double));
-  do{ 
-  double rand_x=-0.625 + 1.25*RAND;
-  double rand_y=-0.625 + 1.25*RAND;
-  } while((rand_x<=-0.25 + radius && (rand_y>0.005+radius || rand_y<-0.005-radius))||((rand_x>0.125-0.005-radius&&rand_x<0.125+0.005+radius)&&(rand_y>=-0.225-radius)));
->>>>>>> d5ee21ecdd3e013a9afbd920cc576ee018a05641
+
   array[0]=rand_x;
   array[1]=rand_y;
   return array;
 }
 
-<<<<<<< HEAD
 uint16_t event_type_assignment() {
 	return (rand()>PROB_EVENTA) //returns 1 for type B and 0 for type A
 }
 
-=======
->>>>>>> d5ee21ecdd3e013a9afbd920cc576ee018a05641
 double expovariate(double mu) {
   double uniform = RAND;
   while (uniform < 1e-7) uniform = RAND;
@@ -131,11 +114,7 @@ class Event {*
   public:
   //Event creation
   Event(uint16_t id) : id_(id), pos_(rand_coord(), rand_coord()),
-<<<<<<< HEAD
     assigned_to_(-1), event_type(event_type_assignment()), t_announced_(-1), best_bidder_(-1), best_bid_(0.0), t_done_(-1)
-=======
-    assigned_to_(-1), event_type(-1), t_announced_(-1), best_bidder_(-1), best_bid_(0.0), t_done_(-1)
->>>>>>> d5ee21ecdd3e013a9afbd920cc576ee018a05641
   {
     node_ = g_event_nodes_free.back();  // Place node
     g_event_nodes_free.pop_back();
@@ -144,7 +123,6 @@ class Event {*
     event_node_pos[0] = pos_.x;
     event_node_pos[1] = pos_.y;
     event_node_pos[2] = .01;
-<<<<<<< HEAD
     
     double color[3];
     if(event_type==EVENT_TYPEA){
@@ -161,29 +139,10 @@ class Event {*
       event_node_pos);
 	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
   }
-=======
     wb_supervisor_field_set_sf_vec3f(
       wb_supervisor_node_get_field(node_,"translation"),
       event_node_pos);
   }
-
-  //SIMPLE WORLD
-  Event(uint16_t id, Point2d pos) : id_(id), pos_(pos),
-    assigned_to_(-1), t_announced_(-1), best_bidder_(-1), best_bid_(0.0), t_done_(-1)
-  {
-    node_ = g_event_nodes_free.back();  // Place node
-    g_event_nodes_free.pop_back();
-    
-    double event_node_pos[3];           // Place event in arena
-    event_node_pos[0] = pos_.x;
-    event_node_pos[1] = pos_.y;
-    event_node_pos[2] = .01;
-    wb_supervisor_field_set_sf_vec3f(
-      wb_supervisor_node_get_field(node_,"translation"),
-      event_node_pos);
-  }
-  //SIMPLE WORLD
->>>>>>> d5ee21ecdd3e013a9afbd920cc576ee018a05641
 
   bool is_assigned() const { return assigned_to_ != (uint16_t) -1; }
   bool was_announced() const { return t_announced_ != (uint64_t) -1; }
@@ -218,7 +177,6 @@ class Event {*
     g_event_nodes_free.push_back(node_);
   }
 };
-<<<<<<< HEAD
 
 // Supervisor class
 class Supervisor {
@@ -545,8 +503,6 @@ void link_event_nodes() {
     g_event_nodes_free.push_back(g_event_nodes[i]);
   }
 }
-=======
->>>>>>> d5ee21ecdd3e013a9afbd920cc576ee018a05641
 
 int main(int argc, char *argv[]) {
   Supervisor supervisor{};
@@ -569,6 +525,4 @@ int main(int argc, char *argv[]) {
   wb_robot_cleanup();
   exit(0);
   return 0;
-  return 0;
 }
-
