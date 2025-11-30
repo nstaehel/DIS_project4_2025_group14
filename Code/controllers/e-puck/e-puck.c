@@ -260,6 +260,11 @@ static void receive_updates()
 
 			////////// START OD THE LOGIC FOR THE PROJECT //////////////
 
+			// If we are busy or have a target, do not bid. 
+			if (target_list_length > 0 || state == WAITING_FOR_TASK) {
+        	return; 
+    		}
+
 			indx = target_list_length;
 			
 			// computing travel time
