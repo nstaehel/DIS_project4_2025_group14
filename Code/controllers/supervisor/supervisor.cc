@@ -180,44 +180,7 @@ public:
     g_event_nodes_free.push_back(node_);
   }
 
-  void reinitialize(Supervisor* sup, uint64_t current_clk) {
-    // we assign a new id and we clear/reset the data
-    id_ = sup->getNextEventId();
-    assigned_to_ = (uint16_t) -1; 
-    t_announced_ = (uint64_t) -1;
-    best_bidder_ = (uint16_t) -1;
-    best_bid_ = 0.0;
-    t_done_ = (uint64_t) -1;
-    bidder_index = 0;
-    bids_in_.reset();
-
-    // we give the new position 
-    pos_ = rand_coord(); 
-	  
-	// define if it's task A or B
-    event_type = event_type_assignment();
-
-	// we assign position and then the color
-    double event_node_pos[3];
-    event_node_pos[0] = pos_.x;
-    event_node_pos[1] = pos_.y;
-    event_node_pos[2] = .01; 
-    
-    double color[3];
-    if(event_type==EVENT_TYPE_A){
-    	color[0]=1.0;
-    	color[1]=0.0;
-    	color[2]=0.0;
-	} else {
-    	color[0]=0.0;
-    	color[1]=0.0;
-    	color[2]=1.0;
-	}
-    wb_supervisor_field_set_sf_vec3f(
-      wb_supervisor_node_get_field(node_,"translation"),
-      event_node_pos);
-	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
-  }
+  void reinitialize(Supervisor* sup, uint64_t current_clk); // I moved it below the Supervisor class to avoid errors
 
 };
 
@@ -554,6 +517,45 @@ void link_event_nodes() {
     g_event_nodes_free.push_back(g_event_nodes[i]);
   }
 }
+
+void reinitialize(Supervisor* sup, uint64_t current_clk) {
+    // we assign a new id and we clear/reset the data
+    id_ = sup->getNextEventId();
+    assigned_to_ = (uint16_t) -1; 
+    t_announced_ = (uint64_t) -1;
+    best_bidder_ = (uint16_t) -1;
+    best_bid_ = 0.0;
+    t_done_ = (uint64_t) -1;
+    bidder_index = 0;
+    bids_in_.reset();
+
+    // we give the new position 
+    pos_ = rand_coord(); 
+	  
+	// define if it's task A or B
+    event_type = event_type_assignment();
+
+	// we assign position and then the color
+    double event_node_pos[3];
+    event_node_pos[0] = pos_.x;
+    event_node_pos[1] = pos_.y;
+    event_node_pos[2] = .01; 
+    
+    double color[3];
+    if(event_type==EVENT_TYPE_A){
+    	color[0]=1.0;
+    	color[1]=0.0;
+    	color[2]=0.0;
+	} else {
+    	color[0]=0.0;
+    	color[1]=0.0;
+    	color[2]=1.0;
+	}
+    wb_supervisor_field_set_sf_vec3f(
+      wb_supervisor_node_get_field(node_,"translation"),
+      event_node_pos);
+	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
+  }
 
 int main(int argc, char *argv[]) {
   Supervisor supervisor{};
