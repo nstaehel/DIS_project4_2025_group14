@@ -39,7 +39,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 #define DELTA_T             TIME_STEP/1000   // Timestep (seconds)
 #define MAX_SPEED         800     // Maximum speed
 
-#define MAX_ENERGY_TIME 120000 // 2 minutes in webot world time
+#define MAX_ENERGY_TIME 120.0 // 2 minutes 
 
 #define INVALID          -999
 #define BREAK            -999 //for physics plugin
@@ -263,7 +263,7 @@ static void receive_updates()
 			indx = target_list_length;
 			
 			// computing travel time
-			double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_z);  
+			double d = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
 			double travel_time = dist_to_task / 0.5; // since the max speed is 0.5 m/s
 
 			// we get the time to do the task by the message, considering the type of the robot
