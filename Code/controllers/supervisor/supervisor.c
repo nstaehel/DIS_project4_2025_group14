@@ -29,8 +29,8 @@ using namespace std;
 #define NUM_ROBOTS (NUM_ROBOTS_A + NUM_ROBOTS_B)
 #define NUM_EVENTS 10
 
-#define PROB_EVENTA 1/3
-#define PROB_EVENTB 2/3
+#define PROB_EVENTA (1.0/3.0) // fix we use floating point
+#define PROB_EVENTB (2.0/3.0)
 
 #define EVENT_TYPE_A 0
 #define EVENT_TYPE_B 1
@@ -82,7 +82,7 @@ double* rand_coord() {
 }
 
 uint16_t event_type_assignment() {
-	return (rand()>PROB_EVENTA) //returns 1 for type B and 0 for type A
+	return (RAND >PROB_EVENTA) //returns 1 for type B and 0 for type A // here I changed rand() to RAND which is normalized 0.0-1.0
 }
 
 double expovariate(double mu) {
