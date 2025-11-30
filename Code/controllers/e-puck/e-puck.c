@@ -39,6 +39,8 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 #define DELTA_T             TIME_STEP/1000   // Timestep (seconds)
 #define MAX_SPEED         800     // Maximum speed
 
+#define MAX_ENERGY_TIME 120000 // 2 minutes in webot world time
+
 #define INVALID          -999
 #define BREAK            -999 //for physics plugin
 
@@ -55,6 +57,7 @@ typedef enum {
     GO_TO_GOAL      = 2,                    // Initial state aliases
     OBSTACLE_AVOID  = 3,
     RANDOM_WALK     = 4,
+	WAITING_FOR_TASK = 5 // state added for the robot to wait for a task
 } robot_state_t;
 
 #define DEFAULT_STATE (STAY)
@@ -69,6 +72,15 @@ typedef enum {
 // NOTE: Weights from reynolds2.h
 int Interconn[16] = {17,29,34,10,8,-38,-56,-76,-72,-58,-36,8,10,36,28,18};
 
+// Row 0 = Robot A, Row 1 = Robot B
+// Col 0 = Task A, Col 1 = Task B
+int service_times[2][2] = {
+    {3000, 5000},  // Rob A: Task A=3s, Task B=5s
+    {9000, 1000}   // Rob B: Task A=9s, Task B=1s
+};
+// timing variables for doing the task
+double task_start_time = 0.0; 
+int current_task_duration = 0;
 
 // The state variables
 int clock;
@@ -76,9 +88,11 @@ uint16_t robot_id;          // Unique robot ID
 robot_state_t state;                 // State of the robot
 double my_pos[3];           // X, Z, Theta of this robot
 char target_valid;          // boolean; whether we are supposed to go to the target
-double target[99][3];       // x and z coordinates of target position (max 99 targets)
+double target[99][4];       // x and z coordinates of target position (max 99 targets) // I added the fourth ( x, y, ID and the type is the fourth)
 int lmsg, rmsg;             // Communication variables
 int indx;                   // Event index to be sent to the supervisor
+int my_type = 0; // 0 for A, 1 for B type of the robot
+double active_time = 0.0; // time for wich the robot has been active
 
 float buff[99];             // Buffer for physics plugin
 
@@ -189,6 +203,7 @@ static void receive_updates()
             target[msg.event_index][0] = msg.event_x;
             target[msg.event_index][1] = msg.event_y;
             target[msg.event_index][2] = msg.event_id;
+			target[msg.event_index][3] = msg.event_type; // we store also the type of the task
             target_valid = 1; //used in general state machine
             target_list_length = target_list_length+1;
         }
@@ -211,8 +226,7 @@ static void receive_updates()
                 ////////////////////////////////////////////////////////////////
 
             ///*** SIMPLE TACTIC ***///
-            indx = target_list_length;
-            double d = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);
+            
             ///*** END SIMPLE TACTIC ***///
                 
 
@@ -243,6 +257,22 @@ static void receive_updates()
             //}
 
             ///*** END BEST TACTIC ***///
+
+			////////// START OD THE LOGIC FOR THE PROJECT //////////////
+
+			indx = target_list_length;
+			
+			// computing travel time
+			double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_z);  
+			double travel_time = dist_to_task / 0.5; // since the max speed is 0.5 m/s
+
+			// we get the time to do the task by the message, considering the type of the robot
+			double service_time_sec = service_times[my_type][msg.event_type] / 1000.0;
+
+    		// computing of the total cost
+    		double total_cost = travel_time + service_time_sec;
+
+			
                 
             // Send my bid to the supervisor
             const bid_t my_bid = {robot_id, msg.event_id, d, indx};
@@ -313,7 +343,11 @@ void reset(void)
         target[i][0] = 0;
         target[i][1] = 0;
         target[i][2] = INVALID; 
+		target[i][3] = 0; // we inizialize the state to A but we will assign it in the line below
     }
+
+	if (robot_id < 2) my_type = 0; // Assign the type of the robot, we have 2 robot type A (ID 0 and 1) and then 3 robot type B
+	else my_type = 1;
 
     // Start in the DEFAULT_STATE
     state = DEFAULT_STATE;
@@ -351,9 +385,26 @@ void reset(void)
 
 void update_state(int _sum_distances)
 {
+	// first we check if we are over the MAX_ENERGY_TIME
+	if (active_time > MAX_ENERGY_TIME) {
+        state = STAY; 
+        return;
+    }
+
+	if (state == WAITING_FOR_TASK) return; // we stay in waiting until we have completed the task
+
+	double d = 999; // we just initialize with a big number 
+    if (target_valid) d = dist(my_pos[0], my_pos[1], target[0][0], target[0][1]);
+	
     if (_sum_distances > STATECHANGE_DIST && state == GO_TO_GOAL)
     {
         state = OBSTACLE_AVOID;
+    }
+	else if (target_valid && d < 0.1) { // 0.1m range to do the task
+        state = WAITING_FOR_TASK; // we go in the state of doing the task
+        task_start_time = wb_robot_get_time();
+        // we look up duration based on stored type
+        current_task_duration = service_times[my_type][(int)target[0][3]];
     }
     else if (target_valid)
     {
