@@ -60,6 +60,7 @@ using namespace std;
 
 #define EVENT_GENERATION_DELAY 0
 
+#define EVENT_TIMEOUT (10000) 
 
 WbNodeRef g_event_nodes[NUM_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
@@ -166,7 +167,7 @@ public:
   void restartAuction() {
     assigned_to_ = -1;
     t_announced_ = -1;
-    bids_in_.reset();
+    bids_in_.();
     best_bidder_ = -1;
     best_bid_ = 0.0;
     t_done_ = -1;
@@ -389,10 +390,10 @@ public:
     for (int i=0;i<NUM_ROBOTS;i++) {
       linkRobot(i);
 
-      double pos[2] = {rand_coord(), rand_coord()};
-      setRobotPos(i, pos[0], pos[1]);
-      stat_robot_prev_pos_[i][0] = pos[0];
-      stat_robot_prev_pos_[i][1] = pos[1];
+      Point2d p = rand_coord(); // Get the object first
+	  setRobotPos(i, p.x, p.y); // Extract x and y
+      stat_robot_prev_pos_[i][0] = p.x;
+      stat_robot_prev_pos_[i][1] = p.y;
     }
 
     // initialize the emitter
@@ -518,7 +519,7 @@ void link_event_nodes() {
   }
 }
 
-void reinitialize(Supervisor* sup, uint64_t current_clk) {
+void Event::reinitialize(Supervisor* sup, uint64_t current_clk) {
     // we assign a new id and we clear/reset the data
     id_ = sup->getNextEventId();
     assigned_to_ = (uint16_t) -1; 
