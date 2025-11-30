@@ -91,7 +91,7 @@ double expovariate(double mu) {
 }
 
 // Event class
-class Event {*
+class Event {
   WbNodeRef node_;       //event node ref
   uint16_t assigned_to_; //id of the robot that will handle this event
   uint16_t event_type; // type of event ( A is 0, B is 1)
@@ -183,7 +183,7 @@ class Event {*
     pos_ = rand_coord(); 
 	  
 	// define if it's task A or B
-    event_type = event_type_assignment()
+    event_type = event_type_assignment();
 
 	// we assign position and then the color
     double event_node_pos[3];
