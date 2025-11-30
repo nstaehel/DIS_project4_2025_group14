@@ -54,6 +54,8 @@ using namespace std;
 #define MAX_RUNTIME (3*60*1000)      // ...total runtime after which simulation stops
 #define ACTIVITY_TIME_MAX (2*60*1000) //Time spent doing tasks or moving
 
+#define EVENT_GENERATION_DELAY 0
+
 
 WbNodeRef g_event_nodes[MAX_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
@@ -70,15 +72,14 @@ double gauss(void) {
   return(x1*w);
 }
 
-double* rand_coord() {
-  double* array (double*)malloc(2 * sizeof(double));
-  do{ 
-  double rand_x=-0.575 + 1.15*RAND;
-  double rand_y=-0.575 + 1.15*RAND;
+Point2d rand_coord() {
+  double rand_x, rand_y;
+  do { 
+      rand_x = -0.575 + 1.15*RAND;
+      rand_y = -0.575 + 1.15*RAND;
   } while((rand_x<=-0.30 && (rand_y>0.055 || rand_y<-0.055))||((rand_x>0.07&&rand_x<0.18)&&(rand_y>=-0.275)));
-  array[0]=rand_x;
-  array[1]=rand_y;
-  return array;
+  
+  return Point2d(rand_x, rand_y);
 }
 
 uint16_t event_type_assignment() {
@@ -108,7 +109,7 @@ class Event {
   // Public functions
   public:
   //Event creation
-  Event(uint16_t id) : id_(id), pos_(rand_coord(), rand_coord()),
+  Event(uint16_t id) : id_(id), pos_(rand_coord()),
     assigned_to_(-1), event_type(event_type_assignment()), t_announced_(-1), best_bidder_(-1), best_bid_(0.0), t_done_(-1)
   {
     node_ = g_event_nodes_free.back();  // Place node
