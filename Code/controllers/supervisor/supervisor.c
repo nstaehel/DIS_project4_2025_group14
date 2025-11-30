@@ -120,7 +120,7 @@ class Event {
     
     double color[3];
 	  
-    if(event_type==EVENT_TYPEA){
+    if(event_type==EVENT_TYPE_A){
     	color[0]=1.0;
     	color[1]=0.0;
     	color[2]=0.0;
@@ -192,7 +192,7 @@ class Event {
     event_node_pos[2] = .01; 
     
     double color[3];
-    if(event_type==EVENT_TYPEA){
+    if(event_type==EVENT_TYPE_A){
     	color[0]=1.0;
     	color[1]=0.0;
     	color[2]=0.0;
