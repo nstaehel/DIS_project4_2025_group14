@@ -28,6 +28,7 @@ using namespace std;
 #define NUM_ROBOTS_B 3  
 #define NUM_ROBOTS (NUM_ROBOTS_A + NUM_ROBOTS_B)
 #define NUM_EVENTS 10
+#define TOTAL_EVENTS_TO_HANDLE 9999 //for now we set it really high then we see if to be removed or changed
 
 #define PROB_EVENTA (1.0/3.0) // fix we use floating point
 #define PROB_EVENTB (2.0/3.0)
@@ -57,7 +58,7 @@ using namespace std;
 #define EVENT_GENERATION_DELAY 0
 
 
-WbNodeRef g_event_nodes[MAX_EVENTS];
+WbNodeRef g_event_nodes[NUM_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
 
 double gauss(void) {
@@ -83,7 +84,7 @@ Point2d rand_coord() {
 }
 
 uint16_t event_type_assignment() {
-	return (RAND >PROB_EVENTA) //returns 1 for type B and 0 for type A // here I changed rand() to RAND which is normalized 0.0-1.0
+	return (RAND >PROB_EVENTA); //returns 1 for type B and 0 for type A // here I changed rand() to RAND which is normalized 0.0-1.0
 }
 
 double expovariate(double mu) {
@@ -384,7 +385,7 @@ private:
 
 // Public fucntions
 public:
-  Supervisor() : events_(MAX_EVENTS){}
+  Supervisor() : events_(NUM_EVENTS){}
 
 
 // function to get the next ID and atomically increment the counter that will be used in the reinitialize (since itself can't access the id)
@@ -538,7 +539,7 @@ void link_event_nodes() {
   const char kEventNameFormat[] = "e%d";
   char node_name[16];
   
-  for (int i=0; i<MAX_EVENTS; ++i) {
+  for (int i=0; i<NUM_EVENTS; ++i) {
     sprintf(node_name, kEventNameFormat, i);
     g_event_nodes[i] = wb_supervisor_node_get_from_def(node_name);
     g_event_nodes_free.push_back(g_event_nodes[i]);
