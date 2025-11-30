@@ -263,7 +263,7 @@ static void receive_updates()
 			indx = target_list_length;
 			
 			// computing travel time
-			double d = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
+			double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
 			double travel_time = dist_to_task / 0.5; // since the max speed is 0.5 m/s
 
 			// we get the time to do the task by the message, considering the type of the robot
@@ -275,7 +275,7 @@ static void receive_updates()
 			
                 
             // Send my bid to the supervisor
-            const bid_t my_bid = {robot_id, msg.event_id, d, indx};
+            const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
             wb_emitter_set_channel(emitter_tag, robot_id+1);
             wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
         }
@@ -391,7 +391,14 @@ void update_state(int _sum_distances)
         return;
     }
 
-	if (state == WAITING_FOR_TASK) return; // we stay in waiting until we have completed the task
+	if (state == WAITING_FOR_TASK) {
+		double current_time = wb_robot_get_time();
+        if (current_time - task_start_time < (current_task_duration / 1000.0)) {
+            return; // Continue waiting
+        }
+        // Task complete -> Return to normal 
+        state = DEFAULT_STATE;
+	}
 
 	double d = 999; // we just initialize with a big number 
     if (target_valid) d = dist(my_pos[0], my_pos[1], target[0][0], target[0][1]);
@@ -405,6 +412,9 @@ void update_state(int _sum_distances)
         task_start_time = wb_robot_get_time();
         // we look up duration based on stored type
         current_task_duration = service_times[my_type][(int)target[0][3]];
+		// we stop the motor, so the robot stops
+		wb_motor_set_velocity(left_motor, 0);
+  	    wb_motor_set_velocity(right_motor, 0);
     }
     else if (target_valid)
     {
@@ -517,6 +527,11 @@ void run(int ms)
     // State may change because of obstacles
     update_state(sum_distances);
 
+	// we update the active time of the robot adding the ms so the TIMESTEP
+	if (state == GO_TO_GOAL || state == OBSTACLE_AVOID || state == WAITING_FOR_TASK) {
+    active_time += (double)ms / 1000.0;
+	}
+
     // Set wheel speeds depending on state
     switch (state) {
         case STAY:
@@ -536,6 +551,11 @@ void run(int ms)
             msl = 400;
             msr = 400;
             break;
+
+		case WAITING_FOR_TASK:
+        msl = 0;
+        msr = 0;
+        break;
 
         default:
             printf("Invalid state: robot_id %d \n", robot_id);
