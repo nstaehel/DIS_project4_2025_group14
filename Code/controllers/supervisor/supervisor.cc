@@ -424,7 +424,7 @@ public:
     }
 
     // initialize the emitter
-    emitter_ = wb_robot_get_device("sup_emitter");
+    emitter_ = wb_robot_get_device("emitter");
     if (!emitter_) {
       DBG(("Missing supervisor emitter!\n"));
       exit(1);
