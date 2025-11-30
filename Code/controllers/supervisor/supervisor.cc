@@ -96,8 +96,14 @@ double expovariate(double mu) {
   return -log(uniform) * mu;
 }
 
+class Supervisor; // forward declaration to fix error
+
 // Event class
 class Event {
+
+public:
+  uint16_t id_;          //event id
+  Point2d pos_;          //event pos
   WbNodeRef node_;       //event node ref
   uint16_t assigned_to_; //id of the robot that will handle this event
   uint16_t event_type; // type of event ( A is 0, B is 1)
