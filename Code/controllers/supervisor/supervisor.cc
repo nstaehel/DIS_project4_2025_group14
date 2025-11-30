@@ -16,11 +16,13 @@
 
 using namespace std;
 
-#include "message.h"
 #include "Point2d.h"
+#include "message.h"
 
-#include <webots/robot.h>
+#include <webots/emitter.h>
+#include <webots/receiver.h>
 #include <webots/supervisor.h>
+#include <webots/robot.h>
 
 #define DBG(x) printf x
 #define RAND ((float) rand()/RAND_MAX)
