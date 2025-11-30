@@ -97,6 +97,30 @@ double expovariate(double mu) {
   return -log(uniform) * mu;
 }
 
+WbNodeRef get_material_node(WbNodeRef root) {
+    WbFieldRef children = wb_supervisor_node_get_field(root, "children");
+    if (!children) return NULL;
+    int count = wb_supervisor_field_get_count(children);
+    
+    // Iterate children to find a Shape
+    for(int i=0; i<count; i++) {
+        WbNodeRef child = wb_supervisor_field_get_mf_node(children, i);
+        // We assume the Cylinder/Shape is the first relevant child or check type
+        WbFieldRef appearance = wb_supervisor_node_get_field(child, "appearance");
+        if(appearance) {
+            WbNodeRef app_node = wb_supervisor_field_get_sf_node(appearance);
+            if(app_node) {
+                WbFieldRef mat = wb_supervisor_node_get_field(app_node, "material");
+                if(mat) {
+                    WbNodeRef mat_node = wb_supervisor_field_get_sf_node(mat);
+                    if(mat_node) return mat_node;
+                }
+            }
+        }
+    }
+    return NULL;
+}
+
 class Supervisor; // forward declaration to fix error
 
 // Event class
@@ -142,10 +166,13 @@ public:
     	color[1]=0.0;
     	color[2]=1.0;
 	}
-    wb_supervisor_field_set_sf_vec3f(
-      wb_supervisor_node_get_field(node_,"translation"),
-      event_node_pos);
-	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
+	wb_supervisor_field_set_sf_vec3f(wb_supervisor_node_get_field(node_,"translation"), event_node_pos);
+	
+	WbNodeRef mat_node = get_material_node(node_);
+	  
+	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(mat_node,"diffuseColor"), color);
+	  
+	// wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
   }
 
   bool is_assigned() const { return assigned_to_ != (uint16_t) -1; }
