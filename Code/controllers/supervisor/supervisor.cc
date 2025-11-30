@@ -570,5 +570,4 @@ int main(int argc, char *argv[]) {
   wb_robot_cleanup();
   exit(0);
   return 0;
-  return 0;
 }
