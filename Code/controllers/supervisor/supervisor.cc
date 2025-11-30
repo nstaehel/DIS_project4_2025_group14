@@ -167,7 +167,7 @@ public:
   void restartAuction() {
     assigned_to_ = -1;
     t_announced_ = -1;
-    bids_in_.();
+    bids_in_.reset();
     best_bidder_ = -1;
     best_bid_ = 0.0;
     t_done_ = -1;
