@@ -60,7 +60,7 @@ using namespace std;
 
 #define EVENT_GENERATION_DELAY 0
 
-#define EVENT_TIMEOUT (10000) 
+#define EVENT_TIMEOUT 500
 
 WbNodeRef g_event_nodes[NUM_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
