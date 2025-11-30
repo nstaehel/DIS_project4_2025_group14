@@ -26,6 +26,7 @@ using namespace std;
 
 #define NUM_ROBOTS_A 2              
 #define NUM_ROBOTS_B 3  
+#define NUM_ROBOTS (NUM_ROBOTS_A + NUM_ROBOTS_B)
 #define NUM_EVENTS 10
 
 #define PROB_EVENTA 1/3
@@ -237,7 +238,7 @@ private:
 private:
   void addEvent() {
     events_.push_back(unique_ptr<Event>(new Event{next_event_id_++})); // add to list
-    assert(num_active_events_ < NUM_ACTIVE_EVENTS); // check max. active events not reached
+    assert(num_active_events_ < NUM_EVENTS); // check max. active events not reached
     num_active_events_++;
     t_next_event_ = clock_ + expovariate(EVENT_GENERATION_DELAY);
   }
@@ -406,7 +407,7 @@ public:
     stat_total_distance_ = 0.0;
 
     // add the first few events
-    for (int i=0; i<NUM_ACTIVE_EVENTS; ++i) {
+    for (int i=0; i<NUM_EVENTS; ++i) {
       addEvent();
     }
 
@@ -440,7 +441,7 @@ public:
 
     // ** Add a random new event, if the time has come
     assert(t_next_event_ > 0);
-    if (clock_ >= t_next_event_ && num_active_events_ < NUM_ACTIVE_EVENTS) {
+    if (clock_ >= t_next_event_ && num_active_events_ < NUM_EVENTS) {
       addEvent();
     }
 
