@@ -1,8 +1,4 @@
-#VRML_SIM R2023a utf8
-
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/RectangleArena.proto"
-EXTERNPROTO "../protos/epuck_range.proto"
-
+#VRML_SIM R2022a utf8
 WorldInfo {
   info [
     "The model of the Khepera III robot"
@@ -82,25 +78,25 @@ PointLight {
 Robot {
   children [
     DEF emitter Emitter {
-      channel 1
+      channel 5
     }
     DEF rec1 Receiver {
       name "rec1"
-      channel 1
+      channel 2
     }
     DEF rec2 Receiver {
       name "rec2"
-      channel 2
+      channel 3
       baudRate 960000
     }
     DEF rec3 Receiver {
       name "rec3"
-      channel 3
+      channel 4
       baudRate 960000
     }
     DEF rec4 Receiver {
       name "rec4"
-      channel 4
+      channel 5
       baudRate 960000
     }
     DEF rec5 Receiver {
@@ -130,6 +126,7 @@ Robot {
     }
     DEF rec0 Receiver {
       name "rec0"
+      channel 1
       baudRate 960000
     }
   ]
@@ -161,7 +158,7 @@ DEF e1 Transform {
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 0 0 1
+          diffuseColor 1 0 0
         }
       }
       geometry Cylinder {
@@ -179,7 +176,7 @@ DEF e2 Transform {
       appearance Appearance {
         material Material {
           ambientIntensity 0.5
-          diffuseColor 0 0 1
+          diffuseColor 1 0 0
           shininess 0.5
         }
       }
@@ -248,7 +245,7 @@ DEF e6 Transform {
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 1 0 0
+          diffuseColor 0 0 1
         }
       }
       geometry Cylinder {
@@ -265,7 +262,7 @@ DEF e7 Transform {
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 1 0 0
+          diffuseColor 0 0 1
         }
       }
       geometry Cylinder {
@@ -282,7 +279,7 @@ DEF e8 Transform {
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 1 0 0
+          diffuseColor 0 0 1
         }
       }
       geometry Cylinder {
@@ -299,7 +296,7 @@ DEF e9 Transform {
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 1 0 0
+          diffuseColor 0 0 1
         }
       }
       geometry Cylinder {
