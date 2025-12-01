@@ -39,7 +39,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 #define DELTA_T             TIME_STEP/1000   // Timestep (seconds)
 #define MAX_SPEED         800     // Maximum speed
 
-#define MAX_ENERGY_TIME 120.0 // 2 minutes 
+#define MAX_ENERGY_TIME 120.0*1000 // 2 minutes 
 
 #define INVALID          -999
 #define BREAK            -999 //for physics plugin
@@ -122,6 +122,29 @@ void limit(int *number, int limit) {
 
 double dist(double x0, double y0, double x1, double y1) {
     return sqrt((x0-x1)*(x0-x1) + (y0-y1)*(y0-y1));
+}
+
+
+// Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
+// intersect the intersection point may be stored in the floats i_x and i_y.
+char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, 
+    float p2_x, float p2_y, float p3_x, float p3_y)
+{
+    float s1_x, s1_y, s2_x, s2_y;
+    s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
+    s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
+
+    float s, t;
+    s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
+    t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
+
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+    {
+        // Collision detected
+        return 1;
+    }
+
+    return 0; // No collision
 }
 
 // Check if we received a message and extract information
@@ -258,7 +281,7 @@ static void receive_updates()
 
             ///*** END BEST TACTIC ***///
 
-			////////// START OD THE LOGIC FOR THE PROJECT //////////////
+			////////// START OF THE LOGIC FOR THE PROJECT //////////////
 
 			// If we are busy or have a target, do not bid. 
 			if (target_list_length > 0 || state == WAITING_FOR_TASK) {
@@ -268,8 +291,9 @@ static void receive_updates()
 			indx = target_list_length;
 			
 			// computing travel time
+            char crossing_wall1 = get_line_intersection(my_pos[0], my_pos[1], msg.event_x, msg.event_y, -1.25, 0.0, -0.25, 0.0);
 			double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
-			double travel_time = dist_to_task / 0.5; // since the max speed is 0.5 m/s
+			double travel_time = dist_to_task / MAX_SPEED; // since the max speed is 0.5 m/s
 
 			// we get the time to do the task by the message, considering the type of the robot
 			double service_time_sec = service_times[my_type][msg.event_type] / 1000.0;

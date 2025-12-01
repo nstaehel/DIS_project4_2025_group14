@@ -233,6 +233,8 @@ private:
   WbNodeRef robots_[NUM_ROBOTS];
   WbDeviceTag emitter_;
   WbDeviceTag receivers_[NUM_ROBOTS];
+  uint16_t robots_type_A [NUM_ROBOTS_A] = {0, 1};
+  uint16_t robots_type_B [NUM_ROBOTS_B] = {2, 3, 4};
 
   typedef vector<pair<Event*, message_event_state_t>> event_queue_t;
 
@@ -308,7 +310,7 @@ private:
   void setRobotPos(uint16_t robot_id, double x, double y) {
     WbFieldRef f_pos = wb_supervisor_node_get_field(robots_[robot_id],
       "translation");
-    double pos[3] = {x, y, 0.1};
+    double pos[3] = {x, y, 0.01};
     return wb_supervisor_field_set_sf_vec3f(f_pos, pos);
   }
 
@@ -582,7 +584,10 @@ void Event::reinitialize(Supervisor* sup, uint64_t current_clk) {
     wb_supervisor_field_set_sf_vec3f(
       wb_supervisor_node_get_field(node_,"translation"),
       event_node_pos);
-	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
+
+	WbNodeRef mat_node = get_material_node(node_);
+	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(mat_node,"diffuseColor"), color);
+
   }
 
 int main(int argc, char *argv[]) {
