@@ -27,8 +27,8 @@ using namespace std;
 #define DBG(x) printf x
 #define RAND ((float) rand()/RAND_MAX)
 
-#define NUM_ROBOTS_A 2              
-#define NUM_ROBOTS_B 3  
+#define NUM_ROBOTS_A 2
+#define NUM_ROBOTS_B 3
 #define NUM_ROBOTS (NUM_ROBOTS_A + NUM_ROBOTS_B)
 #define NUM_EVENTS 10
 #define TOTAL_EVENTS_TO_HANDLE 9999 //for now we set it really high then we see if to be removed or changed
@@ -79,16 +79,16 @@ double gauss(void) {
 
 Point2d rand_coord() {
   double rand_x, rand_y;
-  do { 
+  do {
       rand_x = -0.575 + 1.15*RAND;
       rand_y = -0.575 + 1.15*RAND;
-  } while((rand_x<=-0.30 && (rand_y>0.055 || rand_y<-0.055))||((rand_x>0.07&&rand_x<0.18)&&(rand_y>=-0.275)));
-  
+  } while((rand_x <= -0.30 && (rand_y > 0.055 || rand_y < -0.055))||((rand_x > 0.07&&rand_x < 0.18)&&(rand_y >= -0.275)));
+
   return Point2d(rand_x, rand_y);
 }
 
 uint16_t event_type_assignment() {
-	return (RAND >PROB_EVENTA); //returns 1 for type B and 0 for type A // here I changed rand() to RAND which is normalized 0.0-1.0
+	return (RAND > PROB_EVENTA); //returns 1 for type B and 0 for type A // here I changed rand() to RAND which is normalized 0.0-1.0
 }
 
 double expovariate(double mu) {
@@ -101,7 +101,7 @@ WbNodeRef get_material_node(WbNodeRef root) {
     WbFieldRef children = wb_supervisor_node_get_field(root, "children");
     if (!children) return NULL;
     int count = wb_supervisor_field_get_count(children);
-    
+
     // Iterate children to find a Shape
     for(int i=0; i<count; i++) {
         WbNodeRef child = wb_supervisor_field_get_mf_node(children, i);
@@ -149,14 +149,14 @@ public:
   {
     node_ = g_event_nodes_free.back();  // Place node
     g_event_nodes_free.pop_back();
-    
+
     double event_node_pos[3];           // Place event in arena
     event_node_pos[0] = pos_.x;
     event_node_pos[1] = pos_.y;
     event_node_pos[2] = .01;
-    
+
     double color[3];
-	  
+
     if(event_type==EVENT_TYPE_A){
     	color[0]=1.0;
     	color[1]=0.0;
@@ -167,11 +167,11 @@ public:
     	color[2]=1.0;
 	}
 	wb_supervisor_field_set_sf_vec3f(wb_supervisor_node_get_field(node_,"translation"), event_node_pos);
-	
+
 	WbNodeRef mat_node = get_material_node(node_);
-	  
+
 	wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(mat_node,"diffuseColor"), color);
-	  
+
 	// wb_supervisor_field_set_sf_color(wb_supervisor_node_get_field(node_,"diffuseColor"),color);
   }
 
@@ -185,7 +185,7 @@ public:
     if (bid >= 0.0 && (!has_bids() || bid < best_bid_)) {
       best_bidder_ = bidder;
       best_bid_ = bid;
-      bidder_index = index;  
+      bidder_index = index;
     }
     bids_in_.set(bidder);
     if (bids_in_.all()) assigned_to_ = best_bidder_;
@@ -260,7 +260,7 @@ private:
     }
 
     // Get the respective receiver
-    sprintf(node_name, kReceiverNameFormat, id); 
+    sprintf(node_name, kReceiverNameFormat, id);
     receivers_[id] = wb_robot_get_device(node_name);
     if (!receivers_[id]) {
       DBG(("Missing receiver for robot #%d\n", id));
@@ -289,7 +289,7 @@ private:
     msg->event_y = 0.0;
 
     if (event) {
-      assert(event_state != MSG_EVENT_INVALID && 
+      assert(event_state != MSG_EVENT_INVALID &&
              event_state != MSG_EVENT_GPS_ONLY);
       msg->event_id = event->id_;
 	  msg->event_type = event->event_type;
@@ -317,7 +317,7 @@ private:
     for (auto& event : events_) {
       if (!event->is_assigned() || event->is_done())
         continue;
-      
+
       const double *robot_pos = getRobotPos(event->assigned_to_);
       Point2d robot_pos_pt(robot_pos[0], robot_pos[1]);
       double dist = event->pos_.Distance(robot_pos_pt);
@@ -343,7 +343,7 @@ private:
       // IMPL DETAIL: Only allow one auction at a time.
       if (!event->was_announced() && !auction) {
         event->t_announced_ = clock_;
-        event_queue.emplace_back(event.get(), MSG_EVENT_NEW); 
+        event_queue.emplace_back(event.get(), MSG_EVENT_NEW);
         auction = event.get();
         printf("A event %d announced\n", event->id_);
 
@@ -433,7 +433,7 @@ public:
 
   //Do a step
   bool step(uint64_t step_size) {
-    
+
     clock_ += step_size;
 
     // Events that will be announced next or that have just been assigned/done
@@ -448,7 +448,7 @@ public:
     }
 
     handleAuctionEvents(event_queue);
- 
+
     // Send and receive messages
     bid_t* pbid; // inbound
     for (int i=0;i<NUM_ROBOTS;i++) {
@@ -456,8 +456,8 @@ public:
       if (wb_receiver_get_queue_length(receivers_[i]) > 0) {
         assert(wb_receiver_get_queue_length(receivers_[i]) > 0);
         assert(wb_receiver_get_data_size(receivers_[i]) == sizeof(bid_t));
-        
-        pbid = (bid_t*) wb_receiver_get_data(receivers_[i]); 
+
+        pbid = (bid_t*) wb_receiver_get_data(receivers_[i]);
         assert(pbid->robot_id == i);
 
         Event* event = events_.at(pbid->event_id).get();
@@ -486,12 +486,12 @@ public:
       // Send updates to the robot
       while (wb_emitter_get_channel(emitter_) != i+1)
       wb_emitter_set_channel(emitter_, i+1);
-      
+
       if (is_gps_tick) {
         buildMessage(i, NULL, MSG_EVENT_GPS_ONLY, &msg);
 //        printf("sending message %d , %d \n",msg.event_id,msg.robot_id);
         while (wb_emitter_get_channel(emitter_) != i+1)
-            wb_emitter_set_channel(emitter_, i+1);        
+            wb_emitter_set_channel(emitter_, i+1);
         wb_emitter_send(emitter_, &msg, sizeof(message_t));
       }
 
@@ -502,10 +502,10 @@ public:
 
         buildMessage(i, event, event_state, &msg);
         while (wb_emitter_get_channel(emitter_) != i+1)
-              wb_emitter_set_channel(emitter_, i+1);        
+              wb_emitter_set_channel(emitter_, i+1);
 //        printf("> Sent message to robot %d // event_state=%d\n", i, event_state);
 //        printf("sending message event %d , robot %d , emitter %d, channel %d\n",msg.event_id,msg.robot_id,emitter_,      wb_emitter_get_channel(emitter_));
-        
+
         wb_emitter_send(emitter_, &msg, sizeof(message_t));
       }
     }
@@ -523,12 +523,12 @@ public:
       double clock_s = ((double) clock_) / 1000.0;
       double ehr = ((double) num_events_handled_) / clock_s;
       double perf = ((double) num_events_handled_) / stat_total_distance_;
-      
+
       printf("Handled %d events in %d seconds, events handled per second = %.2f\n",
              num_events_handled_, (int) clock_ / 1000, ehr);
       printf("Performance: %f\n", perf);
       return false;
-    } 
+    }
     else { return true;} //continue
   } // << step() <<
 };
@@ -538,7 +538,7 @@ public:
 void link_event_nodes() {
   const char kEventNameFormat[] = "e%d";
   char node_name[16];
-  
+
   for (int i=0; i<NUM_EVENTS; ++i) {
     sprintf(node_name, kEventNameFormat, i);
     g_event_nodes[i] = wb_supervisor_node_get_from_def(node_name);
@@ -549,7 +549,7 @@ void link_event_nodes() {
 void Event::reinitialize(Supervisor* sup, uint64_t current_clk) {
     // we assign a new id and we clear/reset the data
     id_ = sup->getNextEventId();
-    assigned_to_ = (uint16_t) -1; 
+    assigned_to_ = (uint16_t) -1;
     t_announced_ = (uint64_t) -1;
     best_bidder_ = (uint16_t) -1;
     best_bid_ = 0.0;
@@ -557,9 +557,9 @@ void Event::reinitialize(Supervisor* sup, uint64_t current_clk) {
     bidder_index = 0;
     bids_in_.reset();
 
-    // we give the new position 
-    pos_ = rand_coord(); 
-	  
+    // we give the new position
+    pos_ = rand_coord();
+
 	// define if it's task A or B
     event_type = event_type_assignment();
 
@@ -567,8 +567,8 @@ void Event::reinitialize(Supervisor* sup, uint64_t current_clk) {
     double event_node_pos[3];
     event_node_pos[0] = pos_.x;
     event_node_pos[1] = pos_.y;
-    event_node_pos[2] = .01; 
-    
+    event_node_pos[2] = .01;
+
     double color[3];
     if(event_type==EVENT_TYPE_A){
     	color[0]=1.0;
