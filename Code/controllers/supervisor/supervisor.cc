@@ -82,7 +82,7 @@ Point2d rand_coord() {
   do {
       rand_x = -0.575 + 1.15*RAND;
       rand_y = -0.575 + 1.15*RAND;
-  } while((rand_x <= -0.30 && (rand_y < 0.055 || rand_y > -0.055))||((rand_x > 0.07&&rand_x < 0.18)&&(rand_y >= -0.275)));
+  } while((rand_x <= -0.20 && (rand_y < 0.055 || rand_y > -0.055))||((rand_x > 0.07&&rand_x < 0.18)&&(rand_y >= -0.275)));
 
   return Point2d(rand_x, rand_y);
 }
