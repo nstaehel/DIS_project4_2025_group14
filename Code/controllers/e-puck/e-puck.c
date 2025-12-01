@@ -293,12 +293,13 @@ static void receive_updates()
 			// computing travel time
             char crossing_wall1 = get_line_intersection(my_pos[0], my_pos[1], msg.event_x, msg.event_y, -1.25, 0.0, -0.25, 0.0);
             char crossing_wall2 = get_line_intersection(my_pos[0], my_pos[1], msg.event_x, msg.event_y, 0.125, -0.225, 0.125, 0.625);
+            double dist_to_task = 0;
             if (crossing_wall1){
-                double dist_to_task = dist(my_pos[0], my_pos[1], -0.2, 0.0) + dist(-0.2, 0.0, msg.event_x, msg. event_y);
+                dist_to_task = dist(my_pos[0], my_pos[1], -0.2, 0.0) + dist(-0.2, 0.0, msg.event_x, msg. event_y);
             } else if (crossing_wall2){
-                double dist_to_task = dist(my_pos[0], my_pos[1], 0.125, -0.275) + dist(0.125, -0.275, msg.event_x, msg. event_y);
+                dist_to_task = dist(my_pos[0], my_pos[1], 0.125, -0.275) + dist(0.125, -0.275, msg.event_x, msg. event_y);
             } else {
-                double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
+                dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
             }
 			double travel_time = dist_to_task / MAX_SPEED; // since the max speed is 0.5 m/s
 
