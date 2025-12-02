@@ -290,29 +290,16 @@ static void receive_updates()
 
 			indx = target_list_length;
 			
-			// computing travel time
-            char crossing_wall1 = get_line_intersection(my_pos[0], my_pos[1], msg.event_x, msg.event_y, -1.25, 0.0, -0.25, 0.0);
-            char crossing_wall2 = get_line_intersection(my_pos[0], my_pos[1], msg.event_x, msg.event_y, 0.125, -0.225, 0.125, 0.625);
-            double dist_to_task = 0;
-            if (crossing_wall1){
-                dist_to_task = dist(my_pos[0], my_pos[1], -0.2, 0.0) + dist(-0.2, 0.0, msg.event_x, msg. event_y);
-            } else if (crossing_wall2){
-                dist_to_task = dist(my_pos[0], my_pos[1], 0.125, -0.275) + dist(0.125, -0.275, msg.event_x, msg. event_y);
-            } else {
-                dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
-            }
-			double travel_time = dist_to_task / MAX_SPEED; // since the max speed is 0.5 m/s
-
-			// we get the time to do the task by the message, considering the type of the robot
-			double service_time_sec = service_times[my_type][msg.event_type] / 1000.0;
-
-    		// computing of the total cost
-    		double total_cost = travel_time + service_time_sec;
-
 			
+            double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
+
+		
+
+            printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
+            robot_id, msg.event_id, dist_to_task, robot_id+1);
                 
             // Send my bid to the supervisor
-            const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
+            const bid_t my_bid = {robot_id, msg.event_id, dist_to_task, indx};
             wb_emitter_set_channel(emitter_tag, robot_id+1);
             wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
         }
