@@ -58,9 +58,9 @@ using namespace std;
 #define MAX_RUNTIME (3*60*1000)      // ...total runtime after which simulation stops
 #define ACTIVITY_TIME_MAX (2*60*1000) //Time spent doing tasks or moving
 
-#define EVENT_GENERATION_DELAY 0
+#define EVENT_GENERATION_DELAY 1000
 
-#define EVENT_TIMEOUT 500
+#define EVENT_TIMEOUT 2000
 
 WbNodeRef g_event_nodes[NUM_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
@@ -183,6 +183,7 @@ public:
   // Check if event can be assigned
   void updateAuction(uint16_t bidder, double bid, int index) {
     if (bid >= 0.0 && (!has_bids() || bid < best_bid_)) {
+      printf("SUPERVISOR(updateAuction): bid of the robot %d on the event %d\n", bidder, id_);
       best_bidder_ = bidder;
       best_bid_ = bid;
       bidder_index = index;
@@ -456,10 +457,17 @@ public:
     for (int i=0;i<NUM_ROBOTS;i++) {
       // Check if we're receiving data
       if (wb_receiver_get_queue_length(receivers_[i]) > 0) {
+
+        printf("SUPERVISOR: data detected in Receiver %d (Queue Size: %d)\n", i, wb_receiver_get_queue_length(receivers_[i]));
+
         assert(wb_receiver_get_queue_length(receivers_[i]) > 0);
         assert(wb_receiver_get_data_size(receivers_[i]) == sizeof(bid_t));
 
         pbid = (bid_t*) wb_receiver_get_data(receivers_[i]);
+
+        printf("SUPERVISOR: Read Bid -> Robot: %d, Event: %d, Cost: %f\n", 
+           pbid->robot_id, pbid->event_id, pbid->value);
+
         assert(pbid->robot_id == i);
 
         Event* event = events_.at(pbid->event_id).get();
