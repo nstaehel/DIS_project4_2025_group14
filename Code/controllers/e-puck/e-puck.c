@@ -197,26 +197,34 @@ static void receive_updates()
         }
         else if(msg.event_state == MSG_EVENT_DONE)
 		{
+		    int found_and_removed = 0; // Flag to check if we actually removed something
+		
 		    // If event is done, delete it from array 
-		    for(i=0; i<=target_list_length; i++)
+		    for(i=0; i < target_list_length; i++) // Iterate up to current length
 		    {
 		        if((int)target[i][2] == msg.event_id) 
-		        { // look for correct id 
-		            
-		            for(; i<=target_list_length; i++)
+		        { 
+		            // We found the event in OUR list. Now remove it.
+		            // Push list to the left from event index
+		            int j;
+		            for(j=i; j < target_list_length; j++)
 		            { 
-		                target[i][0] = target[i+1][0];
-		                target[i][1] = target[i+1][1];
-		                target[i][2] = target[i+1][2];
-		                target[i][3] = target[i+1][3]; // Added to keep task TYPE synced
+		                target[j][0] = target[j+1][0];
+		                target[j][1] = target[j+1][1];
+		                target[j][2] = target[j+1][2];
+		                target[j][3] = target[j+1][3]; // Don't forget to move the type too!
 		            }
-		
-		            // Now we only decrement if we actually found/removed the event
-		            if(target_list_length-1 == 0) target_valid = 0; 
-		            target_list_length = target_list_length-1;    
 		            
-		            break; // Stop searching since we handled the event
+		            found_and_removed = 1; // Mark that we did an action
+		            break; // Stop looking, we found it
 		        }
+		    }
+		
+		    // ONLY update the length if we actually removed a task
+		    if(found_and_removed)
+		    {
+		        target_list_length = target_list_length - 1;
+		        if(target_list_length == 0) target_valid = 0; 
 		    }
 		}
         else if(msg.event_state == MSG_EVENT_WON)
