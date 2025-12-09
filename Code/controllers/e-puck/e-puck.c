@@ -46,6 +46,15 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 
 #define NUM_ROBOTS 5 // Change this also in the supervisor!
 
+// --- PATH PLANNING CONSTANTS ---
+// Vertical Wall is at X=0.125. Gap is below Y=-0.2.
+#define VERTICAL_DOOR_X  0.125
+#define VERTICAL_DOOR_Y -0.50  // Safe point at the bottom
+
+// Horizontal Wall is at Y=0, X < -0.26. Gap is to the right.
+#define HORIZONTAL_DOOR_X -0.10 // Safe point near center
+#define HORIZONTAL_DOOR_Y  0.00
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Collective decision parameters */
@@ -468,12 +477,56 @@ void compute_avoid_obstacle(int *msl, int *msr, int distances[])
     limit(msr,MAX_SPEED);
 }
 
+// Checks if our path is blocked and returns the next immediate waypoint
+void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
+    
+    // 1. CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
+    // Are we on different sides?
+    int i_am_left     = (my_x < VERTICAL_DOOR_X);
+    int target_is_left = (target_x < VERTICAL_DOOR_X);
+
+    if (i_am_left != target_is_left) {
+        // We must cross the vertical wall. Go to the bottom gap.
+        *out_x = VERTICAL_DOOR_X;
+        *out_y = VERTICAL_DOOR_Y;
+        return;
+    }
+
+    // 2. CHECK HORIZONTAL WALL (Separates Top-Left and Bottom-Left at Y=0)
+    // Only applies if we are both on the LEFT side
+    if (i_am_left && target_is_left) {
+        // The wall exists for X < -0.26. 
+        // If one is Up (Y>0) and one is Down (Y<0), and the path might cross the wall...
+        // Simple check: Just go to the gap if we switch Y zones.
+        int i_am_up     = (my_y > 0);
+        int target_is_up = (target_y > 0);
+
+        // If I am blocked by the wall (I am far left) or target is blocked (it is far left)
+        // AND we are in different Y zones:
+        if (i_am_up != target_is_up) {
+             if (my_x < -0.26 || target_x < -0.26) {
+                 *out_x = HORIZONTAL_DOOR_X;
+                 *out_y = HORIZONTAL_DOOR_Y;
+                 return;
+             }
+        }
+    }
+
+    // 3. NO WALLS DETECTED
+    // Go straight to the actual target
+    *out_x = target_x;
+    *out_y = target_y;
+}
+
 // Computes wheel speed to go towards a goal
 void compute_go_to_goal(int *msl, int *msr) 
 {
+    double nav_x, nav_y;
+
+    get_intermediate_target(my_pos[0], my_pos[1], target[0][0], target[0][1], &nav_x, &nav_y);
     // // Compute vector to goal
-    float a = target[0][0] - my_pos[0];
-    float b = target[0][1] - my_pos[1];
+    float a = nav_x - my_pos[0];
+    float b = nav_y - my_pos[1];
     // Compute wanted position from event position and current location
     float x =  a*cosf(my_pos[2]) - b*sinf(my_pos[2]); // x in robot coordinates
     float y =  a*sinf(my_pos[2]) + b*cosf(my_pos[2]); // y in robot coordinates
@@ -494,6 +547,8 @@ void compute_go_to_goal(int *msl, int *msr)
     limit(msl,MAX_SPEED);
     limit(msr,MAX_SPEED);
 }
+
+
 
 // RUN e-puck
 void run(int ms)
