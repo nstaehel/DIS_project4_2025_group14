@@ -62,6 +62,20 @@ using namespace std;
 
 #define EVENT_TIMEOUT 500
 
+// Arena is 1.25 x 1.25. Bounds are +/- 0.625
+#define ARENA_LIMIT 0.625 
+
+// Internal Walls (Based on our map analysis)
+#define WALL_VERT_X 0.125
+#define WALL_VERT_Y_MIN -0.275 // Extends from this Y upwards
+#define WALL_HORIZ_Y 0.0
+#define WALL_HORIZ_X_MAX -0.26 // Extends from this X leftwards
+
+double meta_collision_time[NUM_ROBOTS]; // Time spent < 0.05m to obstacle
+double meta_active_time[NUM_ROBOTS];    // Time spent alive (battery > 0)
+double meta_sum_active_robots = 0.0;    // Sum of active robot count per step
+uint64_t meta_total_steps = 0;          // Total simulation steps run
+
 WbNodeRef g_event_nodes[NUM_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
 
@@ -434,6 +448,41 @@ public:
     }
   }
 
+  // Checks if a specific robot is closer than 0.05m to ANY obstacle (Wall or Robot)
+  bool is_in_collision_risk(int robot_id) {
+      const double *my_pos = getRobotPos(robot_id);
+      double x = my_pos[0];
+      double y = my_pos[1];
+
+      // 1. CHECK OTHER ROBOTS
+      for (int j = 0; j < NUM_ROBOTS; j++) {
+          if (robot_id == j) continue;
+          const double *other_pos = getRobotPos(j);
+          double dx = x - other_pos[0];
+          double dy = y - other_pos[1];
+          if (sqrt(dx*dx + dy*dy) < 0.05) return true; // Too close to neighbor
+      }
+
+      // 2. CHECK OUTER WALLS (Arena Borders)
+      // Distance to Right/Left or Top/Bottom walls
+      if (ARENA_LIMIT - fabs(x) < 0.05) return true;
+      if (ARENA_LIMIT - fabs(y) < 0.05) return true;
+
+      // 3. CHECK INTERNAL VERTICAL WALL
+      // Wall is at X=0.125, exists for Y > -0.275
+      if (y > WALL_VERT_Y_MIN) {
+          if (fabs(x - WALL_VERT_X) < 0.05) return true;
+      }
+
+      // 4. CHECK INTERNAL HORIZONTAL WALL
+      // Wall is at Y=0.0, exists for X < -0.26
+      if (x < WALL_HORIZ_X_MAX) {
+          if (fabs(y - WALL_HORIZ_Y) < 0.05) return true;
+      }
+
+      return false;
+  }
+
   //Do a step
   bool step(uint64_t step_size) {
 
@@ -545,6 +594,25 @@ public:
         }
     }
 
+    // Update of the metrics
+    meta_total_steps++;
+    int current_active_count = 0;
+    double step_seconds = (double)step_size / 1000.0;
+
+    for (int i = 0; i < NUM_ROBOTS; i++) {
+        // 1. Check if Robot is Active (Battery Limit is 120s)
+        if (clock_ <= 120.0 * 1000) { 
+            current_active_count++;
+            meta_active_time[i] += step_seconds;
+
+            // 2. Check Collision Risk (Only count if robot is active)
+            if (is_in_collision_risk(i)) {
+                meta_collision_time[i] += step_seconds;
+            }
+        }
+    }
+    meta_sum_active_robots += current_active_count;
+
     // Keep track of distance travelled by all robots
     statTotalDistance();
 
@@ -562,6 +630,24 @@ public:
       printf("Handled %d events in %d seconds, events handled per second = %.2f\n",
              num_events_handled_, (int) clock_ / 1000, ehr);
       printf("Performance: %f\n", perf);
+      
+      // Metric 2: Average Collision Avoidance Time (%)
+      // We compute (Total Time < 0.05m) / (Total Active Time)
+      double total_risk_time = 0;
+      double total_active_time = 0;
+      for(int i=0; i<NUM_ROBOTS; i++) {
+          total_risk_time += meta_collision_time[i];
+          total_active_time += meta_active_time[i];
+      }
+      double avg_risk_percent = 0;
+      if (total_active_time > 0) 
+          avg_risk_percent = (total_risk_time / total_active_time) * 100.0;
+          
+      printf("Avg Collision Avoidance Time: %.2f%%\n", avg_risk_percent);
+
+      double avg_active_robots = meta_sum_active_robots / (double)meta_total_steps;
+      printf("Avg Active Robots in the 3 minutes: %.2f\n", avg_active_robots);
+
       return false;
     }
     else { return true;} //continue
