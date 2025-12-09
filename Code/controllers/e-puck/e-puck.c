@@ -156,6 +156,121 @@ char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y,
     return 0; // No collision
 }
 
+void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
+    
+    // 1. CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
+    // Are we on different sides?
+    int i_am_left     = (my_x < VERTICAL_DOOR_X);
+    int target_is_left = (target_x < VERTICAL_DOOR_X);
+
+    if (i_am_left != target_is_left) {
+        // We must cross the vertical wall. Go to the bottom gap.
+        *out_x = VERTICAL_DOOR_X;
+        *out_y = VERTICAL_DOOR_Y;
+        return;
+    }
+
+    // 2. CHECK HORIZONTAL WALL (Separates Top-Left and Bottom-Left at Y=0)
+    // Only applies if we are both on the LEFT side
+    if (i_am_left && target_is_left) {
+        // The wall exists for X < -0.26. 
+        // If one is Up (Y>0) and one is Down (Y<0), and the path might cross the wall...
+        // Simple check: Just go to the gap if we switch Y zones.
+        int i_am_up     = (my_y > 0);
+        int target_is_up = (target_y > 0);
+
+        // If I am blocked by the wall (I am far left) or target is blocked (it is far left)
+        // AND we are in different Y zones:
+        if (i_am_up != target_is_up) {
+             if (my_x < -0.26 || target_x < -0.26) {
+                 *out_x = HORIZONTAL_DOOR_X;
+                 *out_y = HORIZONTAL_DOOR_Y;
+                 return;
+             }
+        }
+    }
+
+    // 3. NO WALLS DETECTED
+    // Go straight to the actual target
+    *out_x = target_x;
+    *out_y = target_y;
+}
+
+// Computes wheel speed to go towards a goal
+void compute_go_to_goal(int *msl, int *msr) 
+{
+    double nav_x, nav_y;
+
+    get_intermediate_target(my_pos[0], my_pos[1], target[0][0], target[0][1], &nav_x, &nav_y);
+    // // Compute vector to goal
+    float a = nav_x - my_pos[0];
+    float b = nav_y - my_pos[1];
+    // Compute wanted position from event position and current location
+    float x =  a*cosf(my_pos[2]) - b*sinf(my_pos[2]); // x in robot coordinates
+    float y =  a*sinf(my_pos[2]) + b*cosf(my_pos[2]); // y in robot coordinates
+
+    float Ku = 0.2;   // Forward control coefficient
+    float Kw = 10.0;  // Rotational control coefficient
+    float range = 1; //sqrtf(x*x + y*y);   // Distance to the wanted position
+    float bearing = atan2(y, x);     // Orientation of the wanted position
+    
+    // Compute forward control
+    float u = Ku*range*cosf(bearing);
+    // Compute rotational control
+    float w = Kw*range*sinf(bearing);
+    
+    // Convert to wheel speeds!
+    *msl = 50*(u - AXLE_LENGTH*w/2.0) / WHEEL_RADIUS;
+    *msr = 50*(u + AXLE_LENGTH*w/2.0) / WHEEL_RADIUS;
+    limit(msl,MAX_SPEED);
+    limit(msr,MAX_SPEED);
+}
+
+// Calculates the full cost (Travel Time + Service Time) for a specific task
+// taking into account obstacles (walls) and the robot's current queue.
+double calculate_bid(double task_x, double task_y, int task_type) {
+    
+    // 1. DETERMINE STARTING POSITION
+    // If I have tasks in queue, I start from the location of the LAST task.
+    // If I am free, I start from my current position.
+    double start_x, start_y;
+    if (indx > 0) { // 'indx' is updated to target_list_length before calling this
+        start_x = target[indx-1][0];
+        start_y = target[indx-1][1];
+    } else {
+        start_x = my_pos[0];
+        start_y = my_pos[1];
+    }
+
+    // 2. PATH PLANNING (Check for Walls)
+    // We ask the planner: "To get from Start to Task, where must I go first?"
+    // If there is a wall, it returns the Door coordinates.
+    // If there is no wall, it returns the Task coordinates directly.
+    double waypoint_x, waypoint_y;
+    get_intermediate_target(start_x, start_y, task_x, task_y, &waypoint_x, &waypoint_y);
+
+    // 3. CALCULATE TRAVEL DISTANCE (2 Segments)
+    // Segment 1: Start -> Waypoint (Door)
+    double dist_segment_1 = dist(start_x, start_y, waypoint_x, waypoint_y);
+    // Segment 2: Waypoint (Door) -> Final Task
+    // Note: If no wall, waypoint == task, so this becomes 0.
+    double dist_segment_2 = dist(waypoint_x, waypoint_y, task_x, task_y);
+    
+    double total_distance = dist_segment_1 + dist_segment_2;
+
+    // 4. CALCULATE COSTS
+    // Travel Time = Distance / Max Speed (0.5 m/s)
+    double travel_time = total_distance / 0.5;
+
+    // Service Time = How long I take to do this specific task type
+    // (service_times is in ms, so divide by 1000.0)
+    double service_time = service_times[my_type][task_type] / 1000.0;
+
+    // 5. TOTAL COST
+    return travel_time + service_time;
+}
+
+
 // Check if we received a message and extract information
 static void receive_updates() 
 {
@@ -253,17 +368,7 @@ static void receive_updates()
 
 			indx = target_list_length;
 
-            // Calculate Service Time: Look up based on my Type and the Task Type
-            // The prompt says: A doing A=3s, B doing B=1s, A doing B=5s, B doing A=9s
-            // service_times[my_type][task_type] is already in your code, but in ms.
-            // We convert to seconds for consistency.
-            double service_time = service_times[my_type][msg.event_type] / 1000.0;
-			
-            double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
-
-            double travel_time = dist_to_task / 0.5; // 0.5 is defined MAX_SPEED in Supervisor
-
-            double total_cost = travel_time + service_time;
+            double total_cost = calculate_bid(msg.event_x, msg.event_y, msg.event_type);
 
             printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
             robot_id, msg.event_id, total_cost, robot_id+1);
@@ -478,76 +583,6 @@ void compute_avoid_obstacle(int *msl, int *msr, int distances[])
 }
 
 // Checks if our path is blocked and returns the next immediate waypoint
-void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
-    
-    // 1. CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
-    // Are we on different sides?
-    int i_am_left     = (my_x < VERTICAL_DOOR_X);
-    int target_is_left = (target_x < VERTICAL_DOOR_X);
-
-    if (i_am_left != target_is_left) {
-        // We must cross the vertical wall. Go to the bottom gap.
-        *out_x = VERTICAL_DOOR_X;
-        *out_y = VERTICAL_DOOR_Y;
-        return;
-    }
-
-    // 2. CHECK HORIZONTAL WALL (Separates Top-Left and Bottom-Left at Y=0)
-    // Only applies if we are both on the LEFT side
-    if (i_am_left && target_is_left) {
-        // The wall exists for X < -0.26. 
-        // If one is Up (Y>0) and one is Down (Y<0), and the path might cross the wall...
-        // Simple check: Just go to the gap if we switch Y zones.
-        int i_am_up     = (my_y > 0);
-        int target_is_up = (target_y > 0);
-
-        // If I am blocked by the wall (I am far left) or target is blocked (it is far left)
-        // AND we are in different Y zones:
-        if (i_am_up != target_is_up) {
-             if (my_x < -0.26 || target_x < -0.26) {
-                 *out_x = HORIZONTAL_DOOR_X;
-                 *out_y = HORIZONTAL_DOOR_Y;
-                 return;
-             }
-        }
-    }
-
-    // 3. NO WALLS DETECTED
-    // Go straight to the actual target
-    *out_x = target_x;
-    *out_y = target_y;
-}
-
-// Computes wheel speed to go towards a goal
-void compute_go_to_goal(int *msl, int *msr) 
-{
-    double nav_x, nav_y;
-
-    get_intermediate_target(my_pos[0], my_pos[1], target[0][0], target[0][1], &nav_x, &nav_y);
-    // // Compute vector to goal
-    float a = nav_x - my_pos[0];
-    float b = nav_y - my_pos[1];
-    // Compute wanted position from event position and current location
-    float x =  a*cosf(my_pos[2]) - b*sinf(my_pos[2]); // x in robot coordinates
-    float y =  a*sinf(my_pos[2]) + b*cosf(my_pos[2]); // y in robot coordinates
-
-    float Ku = 0.2;   // Forward control coefficient
-    float Kw = 10.0;  // Rotational control coefficient
-    float range = 1; //sqrtf(x*x + y*y);   // Distance to the wanted position
-    float bearing = atan2(y, x);     // Orientation of the wanted position
-    
-    // Compute forward control
-    float u = Ku*range*cosf(bearing);
-    // Compute rotational control
-    float w = Kw*range*sinf(bearing);
-    
-    // Convert to wheel speeds!
-    *msl = 50*(u - AXLE_LENGTH*w/2.0) / WHEEL_RADIUS;
-    *msr = 50*(u + AXLE_LENGTH*w/2.0) / WHEEL_RADIUS;
-    limit(msl,MAX_SPEED);
-    limit(msr,MAX_SPEED);
-}
-
 
 
 // RUN e-puck
