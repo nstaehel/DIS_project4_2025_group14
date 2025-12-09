@@ -196,37 +196,24 @@ static void receive_updates()
             exit(0);
         }
         else if(msg.event_state == MSG_EVENT_DONE)
-		{
-		    int found_and_removed = 0; // Flag to check if we actually removed something
-		
-		    // If event is done, delete it from array 
-		    for(i=0; i < target_list_length; i++) // Iterate up to current length
-		    {
-		        if((int)target[i][2] == msg.event_id) 
-		        { 
-		            // We found the event in OUR list. Now remove it.
-		            // Push list to the left from event index
-		            int j;
-		            for(j=i; j < target_list_length; j++)
-		            { 
-		                target[j][0] = target[j+1][0];
-		                target[j][1] = target[j+1][1];
-		                target[j][2] = target[j+1][2];
-		                target[j][3] = target[j+1][3]; // Don't forget to move the type too!
-		            }
-		            
-		            found_and_removed = 1; // Mark that we did an action
-		            break; // Stop looking, we found it
-		        }
-		    }
-		
-		    // ONLY update the length if we actually removed a task
-		    if(found_and_removed)
-		    {
-		        target_list_length = target_list_length - 1;
-		        if(target_list_length == 0) target_valid = 0; 
-		    }
-		}
+        {
+            // If event is done, delete it from array 
+            for(i=0; i<=target_list_length; i++)
+            {
+                if((int)target[i][2] == msg.event_id) 
+                { //look for correct id (in case wrong event was done first)
+                    for(; i<=target_list_length; i++)
+                    { //push list to the left from event index
+                        target[i][0] = target[i+1][0];
+                        target[i][1] = target[i+1][1];
+                        target[i][2] = target[i+1][2];
+                    }
+                }
+            }
+            // adjust target list length
+            if(target_list_length-1 == 0) target_valid = 0; //used in general state machine 
+            target_list_length = target_list_length-1;    
+        }
         else if(msg.event_state == MSG_EVENT_WON)
         {
             // insert event at index
@@ -246,114 +233,32 @@ static void receive_updates()
         // check if new event is being auctioned
         else if(msg.event_state == MSG_EVENT_NEW)
         {                
-                //*********         INSERT YOUR TACTIC BELOW         *********//
-                //                                                            //
-                // Determine your bid "d" and the index "indx" at             //
-                // which you want to insert the event into the target list.   //
-                // Available variables:                                       //
-                // my_pos[0], my_pos[1]: Current x and y position of e-puck   //
-                // msg.event_x, msg.event_z: Event x and y position           //
-                // target[n][0], target[n][1]: x and y pos of target n in your//
-                //                             target list                    //
-                // target_list_length: current length of your target list     //
-                //                                                            //
-                // You can use dist(ax, ay, bx, by) to determine the distance //
-                // between points a and b.                                    //
-                ////////////////////////////////////////////////////////////////
-
-            ///*** SIMPLE TACTIC ***///
-            
-            ///*** END SIMPLE TACTIC ***///
-                           
-            // --- DELETE THE BLOCKING IF STATEMENT ---
-            // if (target_list_length > 0 || state == WAITING_FOR_TASK) {
-            //    return; 
-            // }
-            // ----------------------------------------
-
-            // Determine where to put the new task (at the end of the list)
-            indx = target_list_length;
-            
-            double start_x, start_y;
-
-            // SMART BIDDING STRATEGY:
-            // If we already have tasks, calculate cost from the LAST task in our list.
-            // If we are free, calculate cost from our CURRENT position.
-            if(target_list_length > 0) {
-                // My starting point is the location of the last task in my queue
-                start_x = target[target_list_length-1][0];
-                start_y = target[target_list_length-1][1];
-            } else {
-                // My starting point is where I am right now
-                start_x = my_pos[0];
-                start_y = my_pos[1];
-            }
-            
-            // Calculate distance
-            double dist_to_task = dist(start_x, start_y, msg.event_x, msg.event_y);  
-
-            // Add a penalty if the list is very long (optional, helps load balancing)
-            // dist_to_task += target_list_length * 0.1; 
-
-            printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
-            robot_id, msg.event_id, dist_to_task, robot_id+1);
-                
-            // Send my bid to the supervisor
-            const bid_t my_bid = {robot_id, msg.event_id, dist_to_task, indx};
-            wb_emitter_set_channel(emitter_tag, robot_id+1);
-            wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
-                
-
-            ///*** BETTER TACTIC ***///
-            // Place your code here for I17 
-            /*
-		    indx = target_list_length;
-            double d = 0;
-            if(target_list_length > 0){
-			    // TODO: put your strategy here
-               
-		    }else{
-			    // TODO: put your strategy here
-               
-		    }
-		    */
-            ///*** END BETTER TACTIC ***///
-                
-                
-            ///*** BEST TACTIC ***/// 
-		    // Place your code here for I20
-            //indx = 0;
-            //double d = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_z);             
-            //if(target_list_length > 0)
-            //{  
-                // for all the tasks inside the task list (i.e. target[i] where i goes up to target_list_length)  check if putting the current 
-                // event (located at (msg.event_x, msg.event_z)) in between two task results in  a smaller distance, and modify the d accordingly.
-            //}
-
-            ///*** END BEST TACTIC ***///
-            /*
-			////////// START OF THE LOGIC FOR THE PROJECT //////////////
-
 			// If we are busy or have a target, do not bid. 
 			if (target_list_length > 0 || state == WAITING_FOR_TASK) {
         	return; 
     		}
 
 			indx = target_list_length;
-			
+
+            // Calculate Service Time: Look up based on my Type and the Task Type
+            // The prompt says: A doing A=3s, B doing B=1s, A doing B=5s, B doing A=9s
+            // service_times[my_type][task_type] is already in your code, but in ms.
+            // We convert to seconds for consistency.
+            double service_time = service_times[my_type][msg.event_type] / 1000.0;
 			
             double dist_to_task = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);  
 
-		
+            double travel_time = dist_to_task / 0.5; // 0.5 is defined MAX_SPEED in Supervisor
+
+            double total_cost = travel_time + service_time;
 
             printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
-            robot_id, msg.event_id, dist_to_task, robot_id+1);
+            robot_id, msg.event_id, total_cost, robot_id+1);
                 
             // Send my bid to the supervisor
-            const bid_t my_bid = {robot_id, msg.event_id, dist_to_task, indx};
+            const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
             wb_emitter_set_channel(emitter_tag, robot_id+1);
-            wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));   
-            */         
+            wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
         }
     }
     
