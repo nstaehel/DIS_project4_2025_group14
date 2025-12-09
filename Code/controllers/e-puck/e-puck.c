@@ -196,24 +196,29 @@ static void receive_updates()
             exit(0);
         }
         else if(msg.event_state == MSG_EVENT_DONE)
-        {
-            // If event is done, delete it from array 
-            for(i=0; i<=target_list_length; i++)
-            {
-                if((int)target[i][2] == msg.event_id) 
-                { //look for correct id (in case wrong event was done first)
-                    for(; i<=target_list_length; i++)
-                    { //push list to the left from event index
-                        target[i][0] = target[i+1][0];
-                        target[i][1] = target[i+1][1];
-                        target[i][2] = target[i+1][2];
-                    }
-                }
-            }
-            // adjust target list length
-            if(target_list_length-1 == 0) target_valid = 0; //used in general state machine 
-            target_list_length = target_list_length-1;    
-        }
+		{
+		    // If event is done, delete it from array 
+		    for(i=0; i<=target_list_length; i++)
+		    {
+		        if((int)target[i][2] == msg.event_id) 
+		        { // look for correct id 
+		            
+		            for(; i<=target_list_length; i++)
+		            { 
+		                target[i][0] = target[i+1][0];
+		                target[i][1] = target[i+1][1];
+		                target[i][2] = target[i+1][2];
+		                target[i][3] = target[i+1][3]; // Added to keep task TYPE synced
+		            }
+		
+		            // Now we only decrement if we actually found/removed the event
+		            if(target_list_length-1 == 0) target_valid = 0; 
+		            target_list_length = target_list_length-1;    
+		            
+		            break; // Stop searching since we handled the event
+		        }
+		    }
+		}
         else if(msg.event_state == MSG_EVENT_WON)
         {
             // insert event at index
