@@ -60,7 +60,7 @@ using namespace std;
 
 #define EVENT_GENERATION_DELAY 1000
 
-#define EVENT_TIMEOUT 2000
+#define EVENT_TIMEOUT 500
 
 WbNodeRef g_event_nodes[NUM_EVENTS];
 vector<WbNodeRef> g_event_nodes_free;
@@ -331,7 +331,7 @@ private:
         num_events_handled_++;
         event->markDone(clock_);
 		  // reinitialize with a new id
-        event->reinitialize(this, clock_);
+        //event->reinitialize(this, clock_);
         event_queue.emplace_back(event.get(), MSG_EVENT_DONE);
       }
     }
@@ -470,7 +470,26 @@ public:
 
         assert(pbid->robot_id == i);
 
-        Event* event = events_.at(pbid->event_id).get();
+        //Event* event = events_.at(pbid->event_id).get();
+        
+        Event* event = NULL;
+        // 1. We must search the list to find which event has this ID
+        for(auto& e : events_) {
+            if(e->id_ == pbid->event_id) {
+                event = e.get();
+                break;
+            }
+        }
+
+        // 2. Safety check: If the event doesn't exist (e.g. expired), ignore the bid
+        if (event == NULL) {
+             printf("Warning: Event %d not found (expired?). Ignoring bid.\n", pbid->event_id);
+             wb_receiver_next_packet(receivers_[i]);
+             continue; 
+        }
+        
+        
+        
         event->updateAuction(pbid->robot_id, pbid->value, pbid->event_index);
         // TODO: Refactor this (same code above in handleAuctionEvents)
         if (event->is_assigned()) {
@@ -518,6 +537,12 @@ public:
 
         wb_emitter_send(emitter_, &msg, sizeof(message_t));
       }
+    }
+    
+    for (auto& event : events_) {
+        if (event->is_done()) {
+            event->reinitialize(this, clock_);
+        }
     }
 
     // Keep track of distance travelled by all robots
