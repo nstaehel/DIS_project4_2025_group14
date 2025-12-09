@@ -264,6 +264,44 @@ static void receive_updates()
             ///*** SIMPLE TACTIC ***///
             
             ///*** END SIMPLE TACTIC ***///
+                           
+            // --- DELETE THE BLOCKING IF STATEMENT ---
+            // if (target_list_length > 0 || state == WAITING_FOR_TASK) {
+            //    return; 
+            // }
+            // ----------------------------------------
+
+            // Determine where to put the new task (at the end of the list)
+            indx = target_list_length;
+            
+            double start_x, start_y;
+
+            // SMART BIDDING STRATEGY:
+            // If we already have tasks, calculate cost from the LAST task in our list.
+            // If we are free, calculate cost from our CURRENT position.
+            if(target_list_length > 0) {
+                // My starting point is the location of the last task in my queue
+                start_x = target[target_list_length-1][0];
+                start_y = target[target_list_length-1][1];
+            } else {
+                // My starting point is where I am right now
+                start_x = my_pos[0];
+                start_y = my_pos[1];
+            }
+            
+            // Calculate distance
+            double dist_to_task = dist(start_x, start_y, msg.event_x, msg.event_y);  
+
+            // Add a penalty if the list is very long (optional, helps load balancing)
+            // dist_to_task += target_list_length * 0.1; 
+
+            printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
+            robot_id, msg.event_id, dist_to_task, robot_id+1);
+                
+            // Send my bid to the supervisor
+            const bid_t my_bid = {robot_id, msg.event_id, dist_to_task, indx};
+            wb_emitter_set_channel(emitter_tag, robot_id+1);
+            wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
                 
 
             ///*** BETTER TACTIC ***///
@@ -293,7 +331,7 @@ static void receive_updates()
             //}
 
             ///*** END BEST TACTIC ***///
-
+            /*
 			////////// START OF THE LOGIC FOR THE PROJECT //////////////
 
 			// If we are busy or have a target, do not bid. 
@@ -314,7 +352,8 @@ static void receive_updates()
             // Send my bid to the supervisor
             const bid_t my_bid = {robot_id, msg.event_id, dist_to_task, indx};
             wb_emitter_set_channel(emitter_tag, robot_id+1);
-            wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
+            wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));   
+            */         
         }
     }
     
