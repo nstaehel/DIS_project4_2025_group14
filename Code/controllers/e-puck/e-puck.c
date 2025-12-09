@@ -39,7 +39,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 #define DELTA_T             TIME_STEP/1000   // Timestep (seconds)
 #define MAX_SPEED         800     // Maximum speed
 
-#define MAX_ENERGY_TIME 120.0*1000 // 2 minutes 
+#define MAX_ENERGY_TIME 120.0 // 2 minutes 
 
 #define INVALID          -999
 #define BREAK            -999 //for physics plugin
@@ -232,7 +232,11 @@ static void receive_updates()
         }
         // check if new event is being auctioned
         else if(msg.event_state == MSG_EVENT_NEW)
-        {                
+        {         
+            if (active_time > MAX_ENERGY_TIME) {
+            return; 
+            }
+
 			// If we are busy or have a target, do not bid. 
 			if (target_list_length > 0 || state == WAITING_FOR_TASK) {
         	return; 
@@ -366,8 +370,16 @@ void reset(void)
 
 void update_state(int _sum_distances)
 {
+
+    static int energy_depleted_printed = 0;
+
 	// first we check if we are over the MAX_ENERGY_TIME
 	if (active_time > MAX_ENERGY_TIME) {
+        if (!energy_depleted_printed) {
+            printf("Robot %d has run out of ENERGY (Time: %.2f s). Shutting down.\n", 
+                   robot_id, active_time);
+            energy_depleted_printed = 1;
+        }
         state = STAY; 
         return;
     }
