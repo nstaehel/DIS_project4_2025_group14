@@ -503,10 +503,9 @@ void run(int ms)
     }
 
     // Get info from supervisor
-    receive_updates();
-
-    // State may change because of obstacles
     update_state(sum_distances);
+
+    receive_updates();
 
 	// we update the active time of the robot adding the ms so the TIMESTEP
 	if (state == GO_TO_GOAL || state == OBSTACLE_AVOID || state == WAITING_FOR_TASK) {
