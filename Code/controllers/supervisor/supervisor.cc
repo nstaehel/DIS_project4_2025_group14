@@ -60,7 +60,7 @@ using namespace std;
 
 #define EVENT_GENERATION_DELAY 1000
 
-#define EVENT_TIMEOUT 500
+#define EVENT_TIMEOUT 250
 
 // Arena is 1.25 x 1.25. Bounds are +/- 0.625
 #define ARENA_LIMIT 0.625 
@@ -197,7 +197,6 @@ public:
   // Check if event can be assigned
   void updateAuction(uint16_t bidder, double bid, int index) {
     if (bid >= 0.0 && (!has_bids() || bid < best_bid_)) {
-      printf("SUPERVISOR(updateAuction): bid of the robot %d on the event %d\n", bidder, id_);
       best_bidder_ = bidder;
       best_bid_ = bid;
       bidder_index = index;
@@ -507,15 +506,12 @@ public:
       // Check if we're receiving data
       if (wb_receiver_get_queue_length(receivers_[i]) > 0) {
 
-        printf("SUPERVISOR: data detected in Receiver %d (Queue Size: %d)\n", i, wb_receiver_get_queue_length(receivers_[i]));
 
         assert(wb_receiver_get_queue_length(receivers_[i]) > 0);
         assert(wb_receiver_get_data_size(receivers_[i]) == sizeof(bid_t));
 
         pbid = (bid_t*) wb_receiver_get_data(receivers_[i]);
 
-        printf("SUPERVISOR: Read Bid -> Robot: %d, Event: %d, Cost: %f\n", 
-           pbid->robot_id, pbid->event_id, pbid->value);
 
         assert(pbid->robot_id == i);
 
@@ -529,15 +525,11 @@ public:
                 break;
             }
         }
-
-        // 2. Safety check: If the event doesn't exist (e.g. expired), ignore the bid
         if (event == NULL) {
-             printf("Warning: Event %d not found (expired?). Ignoring bid.\n", pbid->event_id);
+             printf("Warning: Event %d not found. Ignoring bid.\n", pbid->event_id);
              wb_receiver_next_packet(receivers_[i]);
              continue; 
         }
-        
-        
         
         event->updateAuction(pbid->robot_id, pbid->value, pbid->event_index);
         // TODO: Refactor this (same code above in handleAuctionEvents)
