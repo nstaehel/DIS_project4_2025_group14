@@ -102,6 +102,7 @@ int lmsg, rmsg;             // Communication variables
 int indx;                   // Event index to be sent to the supervisor
 int my_type = 0; // 0 for A, 1 for B type of the robot
 double active_time = 0.0; // time for wich the robot has been active
+int target_list_length = 0; // number of tasks in the queue
 
 float buff[99];             // Buffer for physics plugin
 
@@ -275,7 +276,7 @@ double calculate_bid(double task_x, double task_y, int task_type) {
 static void receive_updates() 
 {
     message_t msg;
-    int target_list_length = 0;
+    //int target_list_length = 0;
     int i;
     int k;
 
@@ -336,7 +337,9 @@ static void receive_updates()
             }
             // adjust target list length
             if(target_list_length-1 == 0) target_valid = 0; //used in general state machine 
-            target_list_length = target_list_length-1;    
+            target_list_length = target_list_length-1;  
+            printf("--- Robot %d COMPLETED Event %d. Tasks Remaining: %d.\n", 
+                   robot_id, msg.event_id, target_list_length);  
         }
         else if(msg.event_state == MSG_EVENT_WON)
         {
@@ -353,6 +356,8 @@ static void receive_updates()
 			target[msg.event_index][3] = msg.event_type; // we store also the type of the task
             target_valid = 1; //used in general state machine
             target_list_length = target_list_length+1;
+            printf(">>> Robot %d WON Event %d! New Queue Size: %d/3. (Inserted at index %d)\n", 
+                   robot_id, msg.event_id, target_list_length, msg.event_index);
         }
         // check if new event is being auctioned
         else if(msg.event_state == MSG_EVENT_NEW)
@@ -361,10 +366,16 @@ static void receive_updates()
                 return; 
             }
 
+            if (target_list_length >= 3) {
+                return;
+            }
+
+            /*
 			// If we are busy or have a target, do not bid. 
 			if (state == WAITING_FOR_TASK) {
         	    return; 
     		}
+            */
             indx = 0;
             double d = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);
             if(target_list_length > 0){
@@ -393,9 +404,12 @@ static void receive_updates()
             }
 
             double total_cost = calculate_bid(msg.event_x, msg.event_y, msg.event_type);
-
+            /*
             printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
             robot_id, msg.event_id, total_cost, robot_id+1);
+            */
+            printf("Robot %d [Queue: %d/3]: Bidding on Event %d. Cost: %.2f.\n", 
+                   robot_id, target_list_length, msg.event_id, total_cost);
                 
             // Send my bid to the supervisor
             const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
@@ -530,6 +544,10 @@ void update_state(int _sum_distances)
         // Task complete -> Return to normal 
         state = DEFAULT_STATE;
 	}
+
+    // Ensure target_valid remains true if tasks exist in the queue
+    if (target_list_length > 0) target_valid = 1;
+    else target_valid = 0;
 
 	double d = 999; // we just initialize with a big number 
     if (target_valid) d = dist(my_pos[0], my_pos[1], target[0][0], target[0][1]);
