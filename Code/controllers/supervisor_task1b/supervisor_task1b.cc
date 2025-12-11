@@ -592,12 +592,32 @@ public:
     double step_seconds = (double)step_size / 1000.0;
 
     for (int i = 0; i < NUM_ROBOTS; i++) {
-        // 1. Check if Robot is Active (Battery Limit is 120s)
-        if (clock_ <= 120.0 * 1000) { 
+        // 1. Check if Robot is Physically Alive (Battery Limit)
+        // We track this using our own counter in the supervisor to be safe
+        if (meta_active_time[i] >= 120.0) {
+            continue; // Robot is dead, cannot be active
+        }
+
+        // 2. Check if Robot has Work (Equivalent to Robot State != STAY)
+        bool has_work = false;
+        for(const auto& event_ptr : events_) {
+            // Check if this event is assigned to robot i AND not yet finished
+            if (event_ptr->is_assigned() && 
+                event_ptr->assigned_to_ == i && 
+                !event_ptr->is_done()) {
+                has_work = true;
+                break; // Found work, robot is active
+            }
+        }
+
+        // 3. Update Counters if Active
+        if (has_work) {
             current_active_count++;
+            
+            // This matches the robot's "active_time += ms"
             meta_active_time[i] += step_seconds;
 
-            // 2. Check Collision Risk (Only count if robot is active)
+            // Collision risk only counts if robot is moving/working
             if (is_in_collision_risk(i)) {
                 meta_collision_time[i] += step_seconds;
             }
