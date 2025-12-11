@@ -370,6 +370,14 @@ static void receive_updates()
 
             double total_cost = calculate_bid(msg.event_x, msg.event_y, msg.event_type);
 
+            double remaining_energy = MAX_ENERGY_TIME - active_time;
+
+            if (total_cost > remaining_energy) {
+                printf("Robot %d Refusing Bid: Cost (%.2fs) > Battery (%.2fs)\n", 
+                       robot_id, total_cost, remaining_energy);
+                return; // Stop here. Do not send bid.
+            }
+
             printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
             robot_id, msg.event_id, total_cost, robot_id+1);
                 
