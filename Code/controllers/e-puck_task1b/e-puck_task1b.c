@@ -483,8 +483,7 @@ void reset(void)
 		target[i][3] = 0; // we inizialize the state to A but we will assign it in the line below
     }
 
-	if (robot_id < 2) my_type = 0; // Assign the type of the robot, we have 2 robot type A (ID 0 and 1) and then 3 robot type B
-	else my_type = 1;
+	
 
     // Start in the DEFAULT_STATE
     state = DEFAULT_STATE;
@@ -495,6 +494,9 @@ void reset(void)
     int tmp_id;
     if (sscanf(robot_name, "e-puck%d", &tmp_id)) {robot_id = (uint16_t)tmp_id;} 
     else {fprintf(stderr, "ERROR: couldn't parse my id %s \n", robot_name); exit(1);}
+
+	if (robot_id < 2) my_type = 0; // Assign the type of the robot, we have 2 robot type A (ID 0 and 1) and then 3 robot type B
+	else my_type = 1;
 
     // Am I used in this simulation?
     if (robot_id >= NUM_ROBOTS) {
