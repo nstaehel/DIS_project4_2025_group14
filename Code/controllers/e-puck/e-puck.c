@@ -377,6 +377,11 @@ static void receive_updates()
                        robot_id, total_cost, remaining_energy);
                 return; // Stop here. Do not send bid.
             }
+            if (total_cost > 5) {
+                printf("Robot %d Refusing Bid: Cost (%.2fs) too high\n", 
+                       robot_id, total_cost);
+                return; // Stop here. Do not send bid.
+            }
 
             printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
             robot_id, msg.event_id, total_cost, robot_id+1);
@@ -453,8 +458,6 @@ void reset(void)
 		target[i][3] = 0; // we inizialize the state to A but we will assign it in the line below
     }
 
-	if (robot_id < 2) my_type = 0; // Assign the type of the robot, we have 2 robot type A (ID 0 and 1) and then 3 robot type B
-	else my_type = 1;
 
     // Start in the DEFAULT_STATE
     state = DEFAULT_STATE;
@@ -466,12 +469,20 @@ void reset(void)
     if (sscanf(robot_name, "e-puck%d", &tmp_id)) {robot_id = (uint16_t)tmp_id;} 
     else {fprintf(stderr, "ERROR: couldn't parse my id %s \n", robot_name); exit(1);}
 
+
+    if (robot_id < 2) my_type = 0; // Assign the type of the robot, we have 2 robot type A (ID 0 and 1) and then 3 robot type B
+	else my_type = 1;
+	
+	printf("DEBUG: I am Robot %d. My Type is %d (0=A, 1=B).\n", robot_id, my_type);
+
     // Am I used in this simulation?
     if (robot_id >= NUM_ROBOTS) {
         fprintf(stderr, "Robot %d is not needed. exiting ...\n", robot_id); 
         wb_robot_cleanup(); 
         exit(0);
     }
+
+    
 
     // Link with webots nodes and devices (attention, use robot_id+1 as channels, because
     // channel 0 is reseved for physics plugin)
