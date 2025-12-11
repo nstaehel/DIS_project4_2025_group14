@@ -47,8 +47,8 @@ def average_intersection_area(r, k, n_runs=1000):
 # Example usage
 if __name__ == "__main__":
     # Parameters
-    r = 5  # Circle radius
-    k = 1.25/0.5  # Square side length
+    r = 0.5 # Circle radius (0.268 for type 1)
+    k = 1.25  # Square side length
     n_runs = 1000
     
     avg_area = average_intersection_area(r, k, n_runs)

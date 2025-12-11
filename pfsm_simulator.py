@@ -4,8 +4,9 @@ import numpy as np
 MAX_RUNTIME = 3*60 
 DEATH_TIME = 2*60
 DELTA_T = 1/3
-P_ALLOCATION = 0.15 #CHANGE WITH VALUE FROM SUB_MICRO MODEL
-TRAVEL_TIME = 0.625 #computed from simulator_distance
+P_ALLOCATION_1 = 0.1189 #CHANGE WITH VALUE FROM SUB_MICRO MODEL
+P_ALLOCATION_2 = 0.344
+TRAVEL_TIME = 0.625/0.5 #computed from simulator_distance
 ACTIVE_TIME_ARRAY = []
 
 for i in range(5):
@@ -19,7 +20,7 @@ for i in range(5):
             else:
                 if STATE == 0:
                     r = random.random()
-                    if r < P_ALLOCATION:
+                    if r < P_ALLOCATION_1:
                         STATE = 1
                         TIMER = TRAVEL_TIME / DELTA_T
                 elif STATE == 1:
@@ -44,7 +45,7 @@ for i in range(5):
             else:
                 if STATE == 0:
                     r = random.random()
-                    if r < P_ALLOCATION:
+                    if r < P_ALLOCATION_2:
                         STATE = 1
                         TIMER = TRAVEL_TIME / DELTA_T
                 elif STATE == 1:
