@@ -498,6 +498,8 @@ void reset(void)
 	if (robot_id < 2) my_type = 0; // Assign the type of the robot, we have 2 robot type A (ID 0 and 1) and then 3 robot type B
 	else my_type = 1;
 
+	printf("DEBUG: I am Robot %d. My Type is %d (0=A, 1=B).\n", robot_id, my_type);
+
     // Am I used in this simulation?
     if (robot_id >= NUM_ROBOTS) {
         fprintf(stderr, "Robot %d is not needed. exiting ...\n", robot_id); 
