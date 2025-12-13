@@ -1,11 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * file:        epuck_crown.c
+ * file:        e-puck.c
  * author:      
- * description: E-puck file for market-based task allocations (DIS lab05)
- *
- * $Revision$	february 2016 by Florian Maushart
- * $Date$
- * $Author$      Last update 2024 by Wanting Jin
+ * description: E-puck file for market-based task allocations Project 4
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <stdio.h>
@@ -63,7 +59,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 
 typedef enum {
     STAY            = 1,
-    GO_TO_GOAL      = 2,                    // Initial state aliases
+    GO_TO_GOAL      = 2,                    
     OBSTACLE_AVOID  = 3,
     RANDOM_WALK     = 4,
 	WAITING_FOR_TASK = 5 // state added for the robot to wait for a task
@@ -129,6 +125,7 @@ void limit(int *number, int limit) {
         *number = -limit;
 }
 
+// Compute distance
 double dist(double x0, double y0, double x1, double y1) {
     return sqrt((x0-x1)*(x0-x1) + (y0-y1)*(y0-y1));
 }
@@ -158,7 +155,7 @@ char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y,
 
 void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
     
-    // 1. CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
+    // CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
     // Are we on different sides?
     int i_am_left     = (my_x < VERTICAL_DOOR_X);
     int target_is_left = (target_x < VERTICAL_DOOR_X);
