@@ -1,11 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * file:        epuck_crown.c
+ * file:        e-puck_task1b.c
  * author:      
- * description: E-puck file for market-based task allocations (DIS lab05)
- *
- * $Revision$	february 2016 by Florian Maushart
- * $Date$
- * $Author$      Last update 2024 by Wanting Jin
+ * description: E-puck file for market-based task allocations task1.b of project4
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <stdio.h>
@@ -44,7 +40,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 #define INVALID          -999
 #define BREAK            -999 //for physics plugin
 
-#define NUM_ROBOTS 5 // Change this also in the supervisor!
+#define NUM_ROBOTS 5 
 
 // --- PATH PLANNING CONSTANTS ---
 // Vertical Wall is at X=0.125. Gap is below Y=-0.2.
@@ -135,32 +131,11 @@ double dist(double x0, double y0, double x1, double y1) {
 }
 
 
-// Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
-// intersect the intersection point may be stored in the floats i_x and i_y.
-char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, 
-    float p2_x, float p2_y, float p3_x, float p3_y)
-{
-    float s1_x, s1_y, s2_x, s2_y;
-    s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
-    s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
-
-    float s, t;
-    s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
-    t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
-
-    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
-    {
-        // Collision detected
-        return 1;
-    }
-
-    return 0; // No collision
-}
-
-void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
+/void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
     
-    // 1. CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
-    // Are we on different sides?
+    // Check if the vertical wall (at X = 0.125) blocks the direct path.
+    // If the robot and the target are on opposite sides of this X-coordinate,
+    // we must route through the specific gap in the vertical wall.
     int i_am_left     = (my_x < VERTICAL_DOOR_X);
     int target_is_left = (target_x < VERTICAL_DOOR_X);
 
@@ -171,17 +146,15 @@ void get_intermediate_target(double my_x, double my_y, double target_x, double t
         return;
     }
 
-    // 2. CHECK HORIZONTAL WALL (Separates Top-Left and Bottom-Left at Y=0)
-    // Only applies if we are both on the LEFT side
+    // If both points are on the left side, we need to check the horizontal wall at Y=0.
+    // This wall only exists for X coordinates less than -0.26.
     if (i_am_left && target_is_left) {
-        // The wall exists for X < -0.26. 
-        // If one is Up (Y>0) and one is Down (Y<0), and the path might cross the wall...
-        // Simple check: Just go to the gap if we switch Y zones.
+
         int i_am_up     = (my_y > 0);
         int target_is_up = (target_y > 0);
 
-        // If I am blocked by the wall (I am far left) or target is blocked (it is far left)
-        // AND we are in different Y zones:
+        // If the start and end points are in different vertical zones (one up, one down),
+        // and either point is far enough left to hit the wall, divert to the horizontal gap.
         if (i_am_up != target_is_up) {
              if (my_x < -0.26 || target_x < -0.26) {
                  *out_x = HORIZONTAL_DOOR_X;
@@ -190,9 +163,8 @@ void get_intermediate_target(double my_x, double my_y, double target_x, double t
              }
         }
     }
-
-    // 3. NO WALLS DETECTED
-    // Go straight to the actual target
+	// No walls block the path, so proceed directly to the target coordinates.
+    *out_x = target_x;
     *out_x = target_x;
     *out_y = target_y;
 }
@@ -227,11 +199,8 @@ void compute_go_to_goal(int *msl, int *msr)
     limit(msr,MAX_SPEED);
 }
 
-// Calculates the full cost (Travel Time + Service Time) for a specific task
-// taking into account obstacles (walls) and the robot's current queue.
 double calculate_bid(double task_x, double task_y, int task_type) {
     
-    // 1. DETERMINE STARTING POSITION
     // If I have tasks in queue, I start from the location of the LAST task.
     // If I am free, I start from my current position.
     double start_x, start_y;
@@ -243,14 +212,12 @@ double calculate_bid(double task_x, double task_y, int task_type) {
         start_y = my_pos[1];
     }
 
-    // 2. PATH PLANNING (Check for Walls)
-    // We ask the planner: "To get from Start to Task, where must I go first?"
     // If there is a wall, it returns the Door coordinates.
     // If there is no wall, it returns the Task coordinates directly.
     double waypoint_x, waypoint_y;
     get_intermediate_target(start_x, start_y, task_x, task_y, &waypoint_x, &waypoint_y);
 
-    // 3. CALCULATE TRAVEL DISTANCE (2 Segments)
+    // We calculate the travel distance
     // Segment 1: Start -> Waypoint (Door)
     double dist_segment_1 = dist(start_x, start_y, waypoint_x, waypoint_y);
     // Segment 2: Waypoint (Door) -> Final Task
@@ -259,18 +226,16 @@ double calculate_bid(double task_x, double task_y, int task_type) {
     
     double total_distance = dist_segment_1 + dist_segment_2;
 
-    // 4. CALCULATE COSTS
     // Travel Time = Distance / Max Speed (0.5 m/s)
     double travel_time = total_distance / 0.5;
 
-    // Service Time = How long I take to do this specific task type
+    // Service Time = How long does it take to do this specific task type depending on the type of the robot and the task
     // (service_times is in ms, so divide by 1000.0)
     double service_time = service_times[my_type][task_type] / 1000.0;
 
-    // 5. TOTAL COST
+    // Total cost computing
     return travel_time + service_time;
 }
-
 
 // Check if we received a message and extract information
 static void receive_updates() 
