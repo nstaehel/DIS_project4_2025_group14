@@ -91,6 +91,7 @@ double gauss(void) {
   return(x1*w);
 }
 
+// Generate random coordinates not into the walls
 Point2d rand_coord() {
   double rand_x, rand_y;
   do {
