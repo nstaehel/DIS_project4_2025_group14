@@ -7,9 +7,9 @@ DELTA_T = 1/3
 for i in range(2):
     if i==0: #type 1 robots
         P_ALLOC = 0.5
-        N_MOVING = np.zeros(MAX_RUNTIME/DELTA_T+1)
-        N_WAITING = np.zeros(MAX_RUNTIME/DELTA_T+1)
-        N_WORKING = np.zeros(MAX_RUNTIME/DELTA_T+1)
+        N_MOVING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
+        N_WAITING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
+        N_WORKING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
         N_WAITING[0]=2
         tau_work = 43
         tau_travel = round(0.6525/0.5/DELTA_T)
@@ -29,9 +29,9 @@ for i in range(2):
         average_type1 = np.mean(N_ACTIVE)
     else:
         P_ALLOC = 0.5
-        N_MOVING = np.zeros(MAX_RUNTIME/DELTA_T+1)
-        N_WAITING = np.zeros(MAX_RUNTIME/DELTA_T+1)
-        N_WORKING = np.zeros(MAX_RUNTIME/DELTA_T+1)
+        N_MOVING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
+        N_WAITING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
+        N_WORKING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
         N_WAITING[0]=3
         tau_work = 37
         tau_travel = round(0.6525/0.5/DELTA_T)
