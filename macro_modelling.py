@@ -13,7 +13,7 @@ for i in range(2):
         N_WAITING[0]=2
         tau_work = 43
         tau_travel = round(0.6525/0.5/DELTA_T)
-        for k in range(MAX_RUNTIME/DELTA_T):
+        for k in range(int(MAX_RUNTIME/DELTA_T)):
             if k - tau_travel < 0:
                 k_delta_t = 0
             else:
@@ -35,7 +35,7 @@ for i in range(2):
         N_WAITING[0]=3
         tau_work = 37
         tau_travel = round(0.6525/0.5/DELTA_T)
-        for k in range(MAX_RUNTIME/DELTA_T):
+        for k in range(int(MAX_RUNTIME/DELTA_T)):
             if k - tau_travel < 0:
                 k_delta_t = 0
             else:
