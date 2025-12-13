@@ -202,7 +202,6 @@ void compute_go_to_goal(int *msl, int *msr)
 // taking into account obstacles (walls) and the robot's current queue.
 double calculate_bid(double task_x, double task_y, int task_type) {
     
-    // 1. DETERMINE STARTING POSITION
     // If I have tasks in queue, I start from the location of the LAST task.
     // If I am free, I start from my current position.
     double start_x, start_y;
@@ -214,14 +213,12 @@ double calculate_bid(double task_x, double task_y, int task_type) {
         start_y = my_pos[1];
     }
 
-    // 2. PATH PLANNING (Check for Walls)
-    // We ask the planner: "To get from Start to Task, where must I go first?"
     // If there is a wall, it returns the Door coordinates.
     // If there is no wall, it returns the Task coordinates directly.
     double waypoint_x, waypoint_y;
     get_intermediate_target(start_x, start_y, task_x, task_y, &waypoint_x, &waypoint_y);
 
-    // 3. CALCULATE TRAVEL DISTANCE (2 Segments)
+    // We calculate the travel distance
     // Segment 1: Start -> Waypoint (Door)
     double dist_segment_1 = dist(start_x, start_y, waypoint_x, waypoint_y);
     // Segment 2: Waypoint (Door) -> Final Task
@@ -230,15 +227,14 @@ double calculate_bid(double task_x, double task_y, int task_type) {
     
     double total_distance = dist_segment_1 + dist_segment_2;
 
-    // 4. CALCULATE COSTS
     // Travel Time = Distance / Max Speed (0.5 m/s)
     double travel_time = total_distance / 0.5;
 
-    // Service Time = How long I take to do this specific task type
+    // Service Time = How long does it take to do this specific task type depending on the type of the robot and the task
     // (service_times is in ms, so divide by 1000.0)
     double service_time = service_times[my_type][task_type] / 1000.0;
 
-    // 5. TOTAL COST
+    // Total cost computing
     return travel_time + service_time;
 }
 
@@ -344,12 +340,13 @@ static void receive_updates()
 
             double remaining_energy = MAX_ENERGY_TIME - active_time;
 
+			// If the remaining energy wouldn't be enough to complete the task
             if (total_cost > remaining_energy) {
                 printf("Robot %d Refusing Bid: Cost (%.2fs) > Battery (%.2fs)\n", 
                        robot_id, total_cost, remaining_energy);
-                return; // Stop here. Do not send bid.
+                return; // Stop herw
             }
-            if (total_cost > 5) {
+            if (total_cost > 5.75) {
                 printf("Robot %d Refusing Bid: Cost (%.2fs) too high\n", 
                        robot_id, total_cost);
                 return; // Stop here. Do not send bid.
@@ -446,14 +443,6 @@ void reset(void)
 	else my_type = 1;
 	
 	printf("DEBUG: I am Robot %d. My Type is %d (0=A, 1=B).\n", robot_id, my_type);
-
-    // Am I used in this simulation?
-    if (robot_id >= NUM_ROBOTS) {
-        fprintf(stderr, "Robot %d is not needed. exiting ...\n", robot_id); 
-        wb_robot_cleanup(); 
-        exit(0);
-    }
-
     
 
     // Link with webots nodes and devices (attention, use robot_id+1 as channels, because
@@ -625,6 +614,7 @@ void run(int ms)
             msr = 400;
             break;
 
+		// If we are doing the task we stand still
 		case WAITING_FOR_TASK:
         msl = 0;
         msr = 0;
