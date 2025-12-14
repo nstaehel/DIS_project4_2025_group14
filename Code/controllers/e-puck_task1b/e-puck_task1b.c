@@ -131,7 +131,7 @@ double dist(double x0, double y0, double x1, double y1) {
 }
 
 
-/void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
+void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
     
     // Check if the vertical wall (at X = 0.125) blocks the direct path.
     // If the robot and the target are on opposite sides of this X-coordinate,
