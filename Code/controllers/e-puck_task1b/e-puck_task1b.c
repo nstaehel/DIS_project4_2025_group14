@@ -19,7 +19,7 @@
   
 #include <webots/supervisor.h> 
 
-#include "../auct_super/message.h" 
+#include "../supervisor/message.h" 
 #define MAX_SPEED_WEB      6.28    // Maximum speed webots
 WbDeviceTag left_motor; //handler for left wheel of the robot
 WbDeviceTag right_motor; //handler for the right wheel of the robot
