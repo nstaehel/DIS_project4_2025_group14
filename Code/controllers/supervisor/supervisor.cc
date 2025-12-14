@@ -636,7 +636,7 @@ public:
       }
       double clock_s = ((double) clock_) / 1000.0;
       double ehr = ((double) num_events_handled_) / clock_s;
-      double perf = ((double) num_events_handled_) / stat_total_distance_;
+      // double perf = ((double) num_events_handled_) / stat_total_distance_;
 
       printf("Handled %d events in %d seconds, events handled per second = %.2f\n",
              num_events_handled_, (int) clock_ / 1000, ehr);
