@@ -130,37 +130,16 @@ void limit(int *number, int limit) {
         *number = -limit;
 }
 
+// Compute distance
 double dist(double x0, double y0, double x1, double y1) {
     return sqrt((x0-x1)*(x0-x1) + (y0-y1)*(y0-y1));
 }
 
-
-// Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
-// intersect the intersection point may be stored in the floats i_x and i_y.
-char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, 
-    float p2_x, float p2_y, float p3_x, float p3_y)
-{
-    float s1_x, s1_y, s2_x, s2_y;
-    s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
-    s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
-
-    float s, t;
-    s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
-    t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
-
-    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
-    {
-        // Collision detected
-        return 1;
-    }
-
-    return 0; // No collision
-}
-
 void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
     
-    // 1. CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
-    // Are we on different sides?
+    // Check if the vertical wall (at X = 0.125) blocks the direct path.
+    // If the robot and the target are on opposite sides of this X-coordinate,
+    // we must route through the specific gap in the vertical wall.
     int i_am_left     = (my_x < VERTICAL_DOOR_X);
     int target_is_left = (target_x < VERTICAL_DOOR_X);
 
@@ -171,17 +150,15 @@ void get_intermediate_target(double my_x, double my_y, double target_x, double t
         return;
     }
 
-    // 2. CHECK HORIZONTAL WALL (Separates Top-Left and Bottom-Left at Y=0)
-    // Only applies if we are both on the LEFT side
+    // If both points are on the left side, we need to check the horizontal wall at Y=0.
+    // This wall only exists for X coordinates less than -0.26.
     if (i_am_left && target_is_left) {
-        // The wall exists for X < -0.26. 
-        // If one is Up (Y>0) and one is Down (Y<0), and the path might cross the wall...
-        // Simple check: Just go to the gap if we switch Y zones.
+
         int i_am_up     = (my_y > 0);
         int target_is_up = (target_y > 0);
 
-        // If I am blocked by the wall (I am far left) or target is blocked (it is far left)
-        // AND we are in different Y zones:
+        // If the start and end points are in different vertical zones (one up, one down),
+        // and either point is far enough left to hit the wall, divert to the horizontal gap.
         if (i_am_up != target_is_up) {
              if (my_x < -0.26 || target_x < -0.26) {
                  *out_x = HORIZONTAL_DOOR_X;
@@ -190,9 +167,8 @@ void get_intermediate_target(double my_x, double my_y, double target_x, double t
              }
         }
     }
-
-    // 3. NO WALLS DETECTED
-    // Go straight to the actual target
+	// No walls block the path, so proceed directly to the target coordinates.
+    *out_x = target_x;
     *out_x = target_x;
     *out_y = target_y;
 }
