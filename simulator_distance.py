@@ -31,9 +31,7 @@ def get_line_intersection(robot_x, robot_y, event_x, event_y, wall_x1, wall_y1, 
     return segments_intersect(A, B, C, D)
 
 def rand_coord():
-    """Generate random coordinates (assuming some bounds - adjust as needed)."""
-    # Assuming coordinates in range [-1, 1] for both x and y
-    # You should adjust these bounds based on your actual arena
+    """Generate random coordinates with the arena constraints."""
     rand_x = rand.uniform(-0.625, 0.625)
     rand_y = rand.uniform(-0.625, 0.625)
     while((rand_x <= -0.20 and (rand_y < 0.055 or rand_y > -0.055))or((rand_x > 0.07 and rand_x < 0.18)and(rand_y >= -0.275)) ):
@@ -83,7 +81,6 @@ def main():
         average_distance += travel_distance
     
     average_distance /= TOTAL_ITER
-    # Using format() instead of f-string for compatibility
     print("Average distance traveled (assuming only presence of 1 robot and 1 event) is {:.6f}".format(average_distance))
     
     return average_distance
