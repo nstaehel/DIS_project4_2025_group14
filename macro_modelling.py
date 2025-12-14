@@ -6,38 +6,29 @@ DEATH_TIME = 2 * 60
 DEATH_STEPS = int(DEATH_TIME / DELTA_T)
 
 for i in range(2):
-    # --- SETUP PARAMETERS ---
+
     if i == 0: # TYPE 1 ROBOTS
         TOTAL_ROBOTS = 2
-        P_ALLOC =  1 # Changed to 1 as requested
+        P_ALLOC =  1
         tau_work = 43
         tau_travel = round(0.6525/0.5/DELTA_T)
     else: # TYPE 2 ROBOTS
         TOTAL_ROBOTS = 3
-        P_ALLOC = 1 # Changed to 1 as requested
+        P_ALLOC = 1
         tau_work = 37
         tau_travel = round(0.6525/0.5/DELTA_T)
 
-    # Initialize Arrays
     N_MOVING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
     N_WAITING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
     N_WORKING = np.zeros(int(MAX_RUNTIME/DELTA_T)+2)
     N_WAITING[0] = TOTAL_ROBOTS
 
-    # --- SIMULATION LOOP ---
     for k in range(int(MAX_RUNTIME/DELTA_T)):
         
-        # [NEW] DEATH CHECK
-        # We check how many steps have been active so far.
-        # We slice [:k] to only count the past.
         active_steps_so_far = np.count_nonzero((N_MOVING[:k] + N_WORKING[:k]) > 0.001)
         
         if active_steps_so_far > DEATH_STEPS:
-            # If we exceeded the battery life, stop the loop.
-            # The remaining values in the arrays will stay 0.
             break
-        
-        # --- FLOW CALCULATION (Fixes Negative Values) ---
         
         # 1. Flow: Moving -> Working
         if k - tau_travel < 0:
@@ -62,7 +53,6 @@ for i in range(2):
         # 3. Update Waiting (Conservation of Mass)
         N_WAITING[k+1] = TOTAL_ROBOTS - N_WORKING[k+1] - N_MOVING[k+1]
 
-    # --- SAVE RESULTS ---
     N_ACTIVE = N_MOVING + N_WORKING
     
     if i == 0:
@@ -70,7 +60,6 @@ for i in range(2):
     else:
         average_type2 = np.mean(N_ACTIVE)
 
-# Print Final
 print("Average for type 1: ", average_type1)
 print("Average for type 2: ", average_type2)
 print("Overall average:    ", (average_type1+average_type2))
