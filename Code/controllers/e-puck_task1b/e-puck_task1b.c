@@ -1,11 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * file:        epuck_crown.c
  * author:      
- * description: E-puck file for market-based task allocations (DIS lab05)
- *
- * $Revision$	february 2016 by Florian Maushart
- * $Date$
- * $Author$      Last update 2024 by Wanting Jin
+ * description: E-puck file for market-based task allocations task 1b
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <stdio.h>
@@ -243,9 +239,6 @@ double calculate_bid(double task_x, double task_y, int task_type) {
     return travel_time + service_time;
 }
 
-
-// Check if we received a message and extract information
-// Check if we received a message and extract information
 // Check if we received a message and extract information
 static void receive_updates() 
 {
@@ -256,17 +249,19 @@ static void receive_updates()
     while (wb_receiver_get_queue_length(receiver_tag) > 0) {
         const message_t *pmsg = wb_receiver_get_data(receiver_tag);
         
-        // Save a copy because the pointer becomes invalid after next_packet
+        // save a copy, cause wb_receiver_next_packet invalidates the pointer
         memcpy(&msg, pmsg, sizeof(message_t));
         wb_receiver_next_packet(receiver_tag);
 
-        // Verify message destination
+        // double check this message is for me
+        // communication should be on specific channel per robot
+        // channel = robot_id + 1, channel 0 reserved for physics plguin
         if(msg.robot_id != robot_id) {
             fprintf(stderr, "Error: Message for robot %d received by robot %d\n", msg.robot_id, robot_id);
             exit(1);
         }
 
-        // Calculate current queue size
+        //find target list length
         i = 0;
         while(target[i][2] != INVALID){ i++;}
         target_list_length = i;  
@@ -274,7 +269,7 @@ static void receive_updates()
         if(target_list_length == 0) target_valid = 0;   
 
         
-        // --- State Machine for Incoming Messages ---
+        // Event state machine
         if(msg.event_state == MSG_EVENT_GPS_ONLY)
         {
             my_pos[0] = msg.robot_x;
@@ -284,6 +279,7 @@ static void receive_updates()
         }
         else if(msg.event_state == MSG_QUIT)
         {
+			// Set speed
             wb_motor_set_velocity(left_motor, 0);
             wb_motor_set_velocity(right_motor, 0);
             wb_robot_step(TIME_STEP);
@@ -291,7 +287,7 @@ static void receive_updates()
         }
         else if(msg.event_state == MSG_EVENT_DONE)
         {
-            // Find the completed event in our list and remove it
+            // If event is done, delete it from array 
             for(i=0; i<=target_list_length; i++)
             {
                 if((int)target[i][2] == msg.event_id) 
@@ -324,12 +320,12 @@ static void receive_updates()
             // Update validity flags
             if(target_list_length-1 == 0) target_valid = 0; 
             target_list_length = target_list_length-1;  
-            printf("--- Robot %d COMPLETED Event %d. Tasks Remaining: %d.\n", 
+            // DEBUG print printf("--- Robot %d COMPLETED Event %d. Tasks Remaining: %d.\n", 
                    robot_id, msg.event_id, target_list_length);  
         }
         else if(msg.event_state == MSG_EVENT_WON)
         {
-            // Make space at the assigned index
+            // insert event at index
             for(i=target_list_length; i>=msg.event_index; i--)
             {
                 target[i+1][0] = target[i][0];
@@ -337,7 +333,6 @@ static void receive_updates()
                 target[i+1][2] = target[i][2];
                 target[i+1][3] = target[i][3];
             }
-            // Insert the new task
             target[msg.event_index][0] = msg.event_x;
             target[msg.event_index][1] = msg.event_y;
             target[msg.event_index][2] = msg.event_id;
@@ -351,12 +346,18 @@ static void receive_updates()
         else if(msg.event_state == MSG_EVENT_NEW)
         {          
             // Ignore new tasks if battery is low or queue is full
-            if (active_time > MAX_ENERGY_TIME) return; 
-            if (target_list_length >= 3) return;
+            if (active_time > MAX_ENERGY_TIME) {
+            return; 
+            }
+
+			// If we arleady have a queue of 3 return 
+            if (target_list_length >= 3){
+				return;
+			}
 
             // --- Find Best Insertion Index (Minimize Extra Distance) ---
             indx = 0;
-            double best_cost_increase = 999999.0;
+            double best_cost_increase = 999;
 
             if (target_list_length == 0) {
                 // If queue is empty, cost is simply distance to the event
@@ -394,12 +395,13 @@ static void receive_updates()
                 }
             }
 
-            // Calculate total time cost (Travel + Service) and send bid
+            // Calculate total time cost (Travel + Service) 
             double total_cost = calculate_bid(msg.event_x, msg.event_y, msg.event_type);
             
             printf("Robot %d [Queue: %d/3]: Bidding on Event %d. Cost: %.2f.\n", 
                    robot_id, target_list_length, msg.event_id, total_cost);
-                
+
+			// Send my bid to the supervisor
             const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
             wb_emitter_set_channel(emitter_tag, robot_id+1);
             wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
@@ -407,23 +409,20 @@ static void receive_updates()
     }
     
     
-    // Send drawing instructions to physics plugin (Channel 0)            
+    // Communication with physics plugin (channel 0)            
     i = 0; k = 1;
     while((int)target[i][2] != INVALID){i++;}
     target_list_length = i; 
-    
     if(target_list_length > 0)
     {        
+        // Line from my position to first target
         wb_emitter_set_channel(emitter_tag,0);         
-        
-        // Line from current position to first task
-        buff[0] = BREAK; 
+        buff[0] = BREAK; // draw new line
         buff[1] = my_pos[0]; 
         buff[2] = my_pos[1];
         buff[3] = target[0][0];
         buff[4] = target[0][1];
-        
-        // Lines between subsequent tasks
+        // Lines between targets
         for(i=5;i<5*target_list_length-1;i=i+5)
         {
             buff[i] = BREAK;
@@ -433,12 +432,10 @@ static void receive_updates()
             buff[i+4] = target[k][1];
             k++;  
         }
-        
-        // Handle case for single task drawing
+        // send, reset channel        
         if(target[0][2] == INVALID){ buff[0] = my_pos[0]; buff[1] = my_pos[1];}
-        
         wb_emitter_send(emitter_tag, &buff, (5*target_list_length)*sizeof(float));
-        wb_emitter_set_channel(emitter_tag,robot_id+1);                      
+        wb_emitter_set_channel(emitter_tag,robot_id+1);                     
     }
 }
 
