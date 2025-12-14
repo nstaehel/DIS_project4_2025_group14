@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * file:        e-puck.c
  * author:      
- * description: E-puck file for market-based task allocations Project 4
+ * description: E-puck file for market-based task allocations task 1a
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <stdio.h>
