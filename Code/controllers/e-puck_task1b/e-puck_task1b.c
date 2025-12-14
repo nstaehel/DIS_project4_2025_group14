@@ -1,7 +1,11 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * file:        e-puck_task1b.c
+ * file:        epuck_crown.c
  * author:      
- * description: E-puck file for market-based task allocations task1.b of project4
+ * description: E-puck file for market-based task allocations (DIS lab05)
+ *
+ * $Revision$	february 2016 by Florian Maushart
+ * $Date$
+ * $Author$      Last update 2024 by Wanting Jin
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <stdio.h>
@@ -19,7 +23,7 @@
   
 #include <webots/supervisor.h> 
 
-#include "../supervisor/message.h" 
+#include "../auct_super/message.h" 
 #define MAX_SPEED_WEB      6.28    // Maximum speed webots
 WbDeviceTag left_motor; //handler for left wheel of the robot
 WbDeviceTag right_motor; //handler for the right wheel of the robot
@@ -40,7 +44,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 #define INVALID          -999
 #define BREAK            -999 //for physics plugin
 
-#define NUM_ROBOTS 5 
+#define NUM_ROBOTS 5 // Change this also in the supervisor!
 
 // --- PATH PLANNING CONSTANTS ---
 // Vertical Wall is at X=0.125. Gap is below Y=-0.2.
@@ -131,11 +135,32 @@ double dist(double x0, double y0, double x1, double y1) {
 }
 
 
+// Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
+// intersect the intersection point may be stored in the floats i_x and i_y.
+char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, 
+    float p2_x, float p2_y, float p3_x, float p3_y)
+{
+    float s1_x, s1_y, s2_x, s2_y;
+    s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
+    s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
+
+    float s, t;
+    s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
+    t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
+
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+    {
+        // Collision detected
+        return 1;
+    }
+
+    return 0; // No collision
+}
+
 void get_intermediate_target(double my_x, double my_y, double target_x, double target_y, double *out_x, double *out_y) {
     
-    // Check if the vertical wall (at X = 0.125) blocks the direct path.
-    // If the robot and the target are on opposite sides of this X-coordinate,
-    // we must route through the specific gap in the vertical wall.
+    // 1. CHECK VERTICAL WALL (Separates Left and Right at X=0.125)
+    // Are we on different sides?
     int i_am_left     = (my_x < VERTICAL_DOOR_X);
     int target_is_left = (target_x < VERTICAL_DOOR_X);
 
@@ -146,15 +171,17 @@ void get_intermediate_target(double my_x, double my_y, double target_x, double t
         return;
     }
 
-    // If both points are on the left side, we need to check the horizontal wall at Y=0.
-    // This wall only exists for X coordinates less than -0.26.
+    // 2. CHECK HORIZONTAL WALL (Separates Top-Left and Bottom-Left at Y=0)
+    // Only applies if we are both on the LEFT side
     if (i_am_left && target_is_left) {
-
+        // The wall exists for X < -0.26. 
+        // If one is Up (Y>0) and one is Down (Y<0), and the path might cross the wall...
+        // Simple check: Just go to the gap if we switch Y zones.
         int i_am_up     = (my_y > 0);
         int target_is_up = (target_y > 0);
 
-        // If the start and end points are in different vertical zones (one up, one down),
-        // and either point is far enough left to hit the wall, divert to the horizontal gap.
+        // If I am blocked by the wall (I am far left) or target is blocked (it is far left)
+        // AND we are in different Y zones:
         if (i_am_up != target_is_up) {
              if (my_x < -0.26 || target_x < -0.26) {
                  *out_x = HORIZONTAL_DOOR_X;
@@ -163,8 +190,9 @@ void get_intermediate_target(double my_x, double my_y, double target_x, double t
              }
         }
     }
-	// No walls block the path, so proceed directly to the target coordinates.
-    *out_x = target_x;
+
+    // 3. NO WALLS DETECTED
+    // Go straight to the actual target
     *out_x = target_x;
     *out_y = target_y;
 }
@@ -199,8 +227,11 @@ void compute_go_to_goal(int *msl, int *msr)
     limit(msr,MAX_SPEED);
 }
 
+// Calculates the full cost (Travel Time + Service Time) for a specific task
+// taking into account obstacles (walls) and the robot's current queue.
 double calculate_bid(double task_x, double task_y, int task_type) {
     
+    // 1. DETERMINE STARTING POSITION
     // If I have tasks in queue, I start from the location of the LAST task.
     // If I am free, I start from my current position.
     double start_x, start_y;
@@ -212,12 +243,14 @@ double calculate_bid(double task_x, double task_y, int task_type) {
         start_y = my_pos[1];
     }
 
+    // 2. PATH PLANNING (Check for Walls)
+    // We ask the planner: "To get from Start to Task, where must I go first?"
     // If there is a wall, it returns the Door coordinates.
     // If there is no wall, it returns the Task coordinates directly.
     double waypoint_x, waypoint_y;
     get_intermediate_target(start_x, start_y, task_x, task_y, &waypoint_x, &waypoint_y);
 
-    // We calculate the travel distance
+    // 3. CALCULATE TRAVEL DISTANCE (2 Segments)
     // Segment 1: Start -> Waypoint (Door)
     double dist_segment_1 = dist(start_x, start_y, waypoint_x, waypoint_y);
     // Segment 2: Waypoint (Door) -> Final Task
@@ -226,42 +259,42 @@ double calculate_bid(double task_x, double task_y, int task_type) {
     
     double total_distance = dist_segment_1 + dist_segment_2;
 
+    // 4. CALCULATE COSTS
     // Travel Time = Distance / Max Speed (0.5 m/s)
     double travel_time = total_distance / 0.5;
 
-    // Service Time = How long does it take to do this specific task type depending on the type of the robot and the task
+    // Service Time = How long I take to do this specific task type
     // (service_times is in ms, so divide by 1000.0)
     double service_time = service_times[my_type][task_type] / 1000.0;
 
-    // Total cost computing
+    // 5. TOTAL COST
     return travel_time + service_time;
 }
 
+
+// Check if we received a message and extract information
+// Check if we received a message and extract information
 // Check if we received a message and extract information
 static void receive_updates() 
 {
     message_t msg;
-    //int target_list_length = 0;
     int i;
     int k;
 
     while (wb_receiver_get_queue_length(receiver_tag) > 0) {
         const message_t *pmsg = wb_receiver_get_data(receiver_tag);
         
-        // save a copy, cause wb_receiver_next_packet invalidates the pointer
+        // Save a copy because the pointer becomes invalid after next_packet
         memcpy(&msg, pmsg, sizeof(message_t));
         wb_receiver_next_packet(receiver_tag);
 
-        // double check this message is for me
-        // communication should be on specific channel per robot
-        // channel = robot_id + 1, channel 0 reserved for physics plguin
+        // Verify message destination
         if(msg.robot_id != robot_id) {
-            fprintf(stderr, "Invalid message: robot_id %d "  "doesn't match receiver %d\n", msg.robot_id, robot_id);
-            //return;
+            fprintf(stderr, "Error: Message for robot %d received by robot %d\n", msg.robot_id, robot_id);
             exit(1);
         }
 
-        //find target list length
+        // Calculate current queue size
         i = 0;
         while(target[i][2] != INVALID){ i++;}
         target_list_length = i;  
@@ -269,7 +302,7 @@ static void receive_updates()
         if(target_list_length == 0) target_valid = 0;   
 
         
-        // Event state machine
+        // --- State Machine for Incoming Messages ---
         if(msg.event_state == MSG_EVENT_GPS_ONLY)
         {
             my_pos[0] = msg.robot_x;
@@ -279,7 +312,6 @@ static void receive_updates()
         }
         else if(msg.event_state == MSG_QUIT)
         {
-            // Set speed
             wb_motor_set_velocity(left_motor, 0);
             wb_motor_set_velocity(right_motor, 0);
             wb_robot_step(TIME_STEP);
@@ -287,96 +319,115 @@ static void receive_updates()
         }
         else if(msg.event_state == MSG_EVENT_DONE)
         {
-            // If event is done, delete it from array 
+            // Find the completed event in our list and remove it
             for(i=0; i<=target_list_length; i++)
             {
                 if((int)target[i][2] == msg.event_id) 
-                { //look for correct id (in case wrong event was done first)
+                { 
+                    // If the completed task is the active one (index 0), force the robot to wait
+                    // before we remove it from the list. This prevents driving through tasks.
+                    if (i == 0) {
+                        state = WAITING_FOR_TASK;
+                        task_start_time = wb_robot_get_time();
+                        
+                        // Get task duration based on type before it gets overwritten
+                        current_task_duration = service_times[my_type][(int)target[i][3]];
+                        
+                        // Stop motors immediately
+                        wb_motor_set_velocity(left_motor, 0);
+                        wb_motor_set_velocity(right_motor, 0);
+                    }
+
+                    // Shift remaining tasks to the left to fill the gap
                     for(; i<=target_list_length; i++)
-                    { //push list to the left from event index
+                    { 
                         target[i][0] = target[i+1][0];
                         target[i][1] = target[i+1][1];
                         target[i][2] = target[i+1][2];
+                        target[i][3] = target[i+1][3]; // Copy task type
                     }
                 }
             }
-            // adjust target list length
-            if(target_list_length-1 == 0) target_valid = 0; //used in general state machine 
+            
+            // Update validity flags
+            if(target_list_length-1 == 0) target_valid = 0; 
             target_list_length = target_list_length-1;  
             printf("--- Robot %d COMPLETED Event %d. Tasks Remaining: %d.\n", 
                    robot_id, msg.event_id, target_list_length);  
         }
         else if(msg.event_state == MSG_EVENT_WON)
         {
-            // insert event at index
+            // Make space at the assigned index
             for(i=target_list_length; i>=msg.event_index; i--)
             {
                 target[i+1][0] = target[i][0];
                 target[i+1][1] = target[i][1];
                 target[i+1][2] = target[i][2];
+                target[i+1][3] = target[i][3];
             }
+            // Insert the new task
             target[msg.event_index][0] = msg.event_x;
             target[msg.event_index][1] = msg.event_y;
             target[msg.event_index][2] = msg.event_id;
-			target[msg.event_index][3] = msg.event_type; // we store also the type of the task
-            target_valid = 1; //used in general state machine
+            target[msg.event_index][3] = msg.event_type; 
+            
+            target_valid = 1; 
             target_list_length = target_list_length+1;
             printf(">>> Robot %d WON Event %d! New Queue Size: %d/3. (Inserted at index %d)\n", 
                    robot_id, msg.event_id, target_list_length, msg.event_index);
         }
-        // check if new event is being auctioned
         else if(msg.event_state == MSG_EVENT_NEW)
-        {         
-            if (active_time > MAX_ENERGY_TIME) {
-                return; 
-            }
+        {          
+            // Ignore new tasks if battery is low or queue is full
+            if (active_time > MAX_ENERGY_TIME) return; 
+            if (target_list_length >= 3) return;
 
-            if (target_list_length >= 3) {
-                return;
-            }
-
-            /*
-			// If we are busy or have a target, do not bid. 
-			if (state == WAITING_FOR_TASK) {
-        	    return; 
-    		}
-            */
+            // --- Find Best Insertion Index (Minimize Extra Distance) ---
             indx = 0;
-            double d = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);
-            if(target_list_length > 0){
-                for(i = 0; i < target_list_length; i++){
-                    if(i == 0){
-                        double dbeforetogoal = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);
-                        double daftertogoal = dist(target[i][0], target[i][1], msg.event_x, msg.event_y);
-                        double dbeforetodafter = dist(my_pos[0], my_pos[1], target[i][0], target[i][1]);
-                        d = dbeforetogoal + daftertogoal - dbeforetodafter;
-                    }else{
-                        double dbeforetogoal = dist(target[i-1][0], target[i-1][1], msg.event_x, msg.event_y);
-                        double daftertogoal = dist(target[i][0], target[i][1], msg.event_x, msg.event_y);
-                        double dbeforetodafter = dist(target[i-1][0], target[i-1][1], target[i][0], target[i][1]);
-                        if((dbeforetogoal + daftertogoal - dbeforetodafter) < d){
-                            d = dbeforetogoal + daftertogoal - dbeforetodafter;
-                            indx = i;
-                        }
-                        if(i == target_list_length - 1){
-                            if(daftertogoal < d) {
-                                d = daftertogoal;
-                                indx = i+1;
-                            }
-                        }
+            double best_cost_increase = 999999.0;
+
+            if (target_list_length == 0) {
+                // If queue is empty, cost is simply distance to the event
+                best_cost_increase = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);
+            } 
+            else {
+                // Option 1: Insert at start (Index 0)
+                double d_robot_new  = dist(my_pos[0], my_pos[1], msg.event_x, msg.event_y);
+                double d_new_first  = dist(target[0][0], target[0][1], msg.event_x, msg.event_y);
+                double d_robot_first = dist(my_pos[0], my_pos[1], target[0][0], target[0][1]);
+                
+                best_cost_increase = d_robot_new + d_new_first - d_robot_first;
+
+                // Option 2: Insert in the middle (Between i-1 and i)
+                for(i = 1; i < target_list_length; i++){
+                    double d_prev_new  = dist(target[i-1][0], target[i-1][1], msg.event_x, msg.event_y);
+                    double d_new_curr  = dist(target[i][0], target[i][1], msg.event_x, msg.event_y);
+                    double d_prev_curr = dist(target[i-1][0], target[i-1][1], target[i][0], target[i][1]);
+
+                    double cost_increase = d_prev_new + d_new_curr - d_prev_curr;
+
+                    if (cost_increase < best_cost_increase) {
+                        best_cost_increase = cost_increase;
+                        indx = i;
                     }
+                }
+
+                // Option 3: Append at the end
+                int last = target_list_length - 1;
+                double d_last_new = dist(target[last][0], target[last][1], msg.event_x, msg.event_y);
+                
+                if (d_last_new < best_cost_increase) {
+                    best_cost_increase = d_last_new;
+                    indx = target_list_length;
                 }
             }
 
+            // Calculate total time cost (Travel + Service) and send bid
             double total_cost = calculate_bid(msg.event_x, msg.event_y, msg.event_type);
-            /*
-            printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
-            robot_id, msg.event_id, total_cost, robot_id+1);
-            */
+            
             printf("Robot %d [Queue: %d/3]: Bidding on Event %d. Cost: %.2f.\n", 
                    robot_id, target_list_length, msg.event_id, total_cost);
                 
-            // Send my bid to the supervisor
             const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
             wb_emitter_set_channel(emitter_tag, robot_id+1);
             wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
@@ -384,20 +435,23 @@ static void receive_updates()
     }
     
     
-    // Communication with physics plugin (channel 0)            
+    // Send drawing instructions to physics plugin (Channel 0)            
     i = 0; k = 1;
     while((int)target[i][2] != INVALID){i++;}
     target_list_length = i; 
+    
     if(target_list_length > 0)
     {        
-        // Line from my position to first target
         wb_emitter_set_channel(emitter_tag,0);         
-        buff[0] = BREAK; // draw new line
+        
+        // Line from current position to first task
+        buff[0] = BREAK; 
         buff[1] = my_pos[0]; 
         buff[2] = my_pos[1];
         buff[3] = target[0][0];
         buff[4] = target[0][1];
-        // Lines between targets
+        
+        // Lines between subsequent tasks
         for(i=5;i<5*target_list_length-1;i=i+5)
         {
             buff[i] = BREAK;
@@ -407,10 +461,12 @@ static void receive_updates()
             buff[i+4] = target[k][1];
             k++;  
         }
-        // send, reset channel        
+        
+        // Handle case for single task drawing
         if(target[0][2] == INVALID){ buff[0] = my_pos[0]; buff[1] = my_pos[1];}
+        
         wb_emitter_send(emitter_tag, &buff, (5*target_list_length)*sizeof(float));
-        wb_emitter_set_channel(emitter_tag,robot_id+1);                     
+        wb_emitter_set_channel(emitter_tag,robot_id+1);                      
     }
 }
 
