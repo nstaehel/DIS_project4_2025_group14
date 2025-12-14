@@ -335,7 +335,7 @@ static void receive_updates()
             target_valid = 1; 
             target_list_length = target_list_length+1;
             // debug print printf(">>> Robot %d WON Event %d! New Queue Size: %d/3. (Inserted at index %d)\n", 
-                   robot_id, msg.event_id, target_list_length, msg.event_index);
+               //    robot_id, msg.event_id, target_list_length, msg.event_index);
         }
         else if(msg.event_state == MSG_EVENT_NEW)
         {          
