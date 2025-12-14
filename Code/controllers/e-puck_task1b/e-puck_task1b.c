@@ -207,7 +207,6 @@ void compute_go_to_goal(int *msl, int *msr)
 // taking into account obstacles (walls) and the robot's current queue.
 double calculate_bid(double task_x, double task_y, int task_type) {
     
-    // 1. DETERMINE STARTING POSITION
     // If I have tasks in queue, I start from the location of the LAST task.
     // If I am free, I start from my current position.
     double start_x, start_y;
@@ -219,14 +218,12 @@ double calculate_bid(double task_x, double task_y, int task_type) {
         start_y = my_pos[1];
     }
 
-    // 2. PATH PLANNING (Check for Walls)
-    // We ask the planner: "To get from Start to Task, where must I go first?"
     // If there is a wall, it returns the Door coordinates.
     // If there is no wall, it returns the Task coordinates directly.
     double waypoint_x, waypoint_y;
     get_intermediate_target(start_x, start_y, task_x, task_y, &waypoint_x, &waypoint_y);
 
-    // 3. CALCULATE TRAVEL DISTANCE (2 Segments)
+    // We calculate the travel distance
     // Segment 1: Start -> Waypoint (Door)
     double dist_segment_1 = dist(start_x, start_y, waypoint_x, waypoint_y);
     // Segment 2: Waypoint (Door) -> Final Task
@@ -235,15 +232,14 @@ double calculate_bid(double task_x, double task_y, int task_type) {
     
     double total_distance = dist_segment_1 + dist_segment_2;
 
-    // 4. CALCULATE COSTS
     // Travel Time = Distance / Max Speed (0.5 m/s)
     double travel_time = total_distance / 0.5;
 
-    // Service Time = How long I take to do this specific task type
+    // Service Time = How long does it take to do this specific task type depending on the type of the robot and the task
     // (service_times is in ms, so divide by 1000.0)
     double service_time = service_times[my_type][task_type] / 1000.0;
 
-    // 5. TOTAL COST
+    // Total cost computing
     return travel_time + service_time;
 }
 
