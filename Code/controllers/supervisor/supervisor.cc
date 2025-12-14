@@ -31,7 +31,7 @@ using namespace std;
 #define NUM_ROBOTS_B 3
 #define NUM_ROBOTS (NUM_ROBOTS_A + NUM_ROBOTS_B)
 #define NUM_EVENTS 10
-#define TOTAL_EVENTS_TO_HANDLE 9999 //for now we set it really high then we see if to be removed or changed
+#define TOTAL_EVENTS_TO_HANDLE 9999 //we set it really high
 
 #define PROB_EVENTA (1.0/3.0) // fix we use floating point
 #define PROB_EVENTB (2.0/3.0)
@@ -55,8 +55,8 @@ using namespace std;
 #define COLLISION_DIST 0.05
 
 #define TOTAL_EVENTS_ALWAYS 10         // number of active events
-#define MAX_RUNTIME (3*60*1000)      // ...total runtime after which simulation stops
-#define ACTIVITY_TIME_MAX (2*60*1000) //Time spent doing tasks or moving
+#define MAX_RUNTIME (3*60*1000)      // total runtime after which simulation stops
+#define ACTIVITY_TIME_MAX (2*60*1000) // max time spent doing tasks or moving
 
 #define EVENT_GENERATION_DELAY 1000
 
@@ -91,7 +91,7 @@ double gauss(void) {
   return(x1*w);
 }
 
-// Generate random coordinates not into the walls
+// Generate random coordinates not into the walls of the world
 Point2d rand_coord() {
   double rand_x, rand_y;
   do {
@@ -172,11 +172,12 @@ public:
 
     double color[3];
 
+	// If task A we set it Red, so (1,0,0)  
     if(event_type==EVENT_TYPE_A){
     	color[0]=1.0;
     	color[1]=0.0;
     	color[2]=0.0;
-	} else {
+	} else { // If task B we set it blue so (0,0,1)
     	color[0]=0.0;
     	color[1]=0.0;
     	color[2]=1.0;
@@ -223,7 +224,7 @@ public:
     g_event_nodes_free.push_back(node_);
   }
 
-  void reinitialize(Supervisor* sup, uint64_t current_clk); // I moved it below the Supervisor class to avoid errors
+  void reinitialize(Supervisor* sup, uint64_t current_clk); // moved it below the Supervisor class to avoid errors
 
 };
 
@@ -371,7 +372,7 @@ private:
           // IMPLEMENTATION DETAIL: If about to time out, assign to
           // the highest bidder or restart the auction if there is none.
           event->assigned_to_ = event->best_bidder_;
-          event_queue.emplace_back(event.get(), MSG_EVENT_WON); // FIXME?
+          event_queue.emplace_back(event.get(), MSG_EVENT_WON); 
           auction = NULL;
           printf("W robot %d won event %d\n", event->assigned_to_, event->id_);
 
@@ -403,7 +404,6 @@ private:
 // Public fucntions
 public:
   Supervisor() : events_(NUM_EVENTS){}
-
 
 // function to get the next ID and atomically increment the counter that will be used in the reinitialize (since itself can't access the id)
    uint16_t getNextEventId() {
@@ -448,7 +448,7 @@ public:
     }
   }
 
-  // Checks if a specific robot is closer than 0.05m to ANY obstacle (Wall or Robot)
+  // Checks if a specific robot is closer than 0.05m to any obstacle (Wall or Robot)
   bool is_in_collision_risk(int robot_id) {
       const double *my_pos = getRobotPos(robot_id);
       double x = my_pos[0];
@@ -493,7 +493,7 @@ public:
 
     markEventsDone(event_queue);
 
-    // ** Add a random new event, if the time has come
+    // ** Add a random new event, if the time has come // not used 
     assert(t_next_event_ > 0);
     if (clock_ >= t_next_event_ && num_active_events_ < NUM_EVENTS) {
       addEvent();
@@ -507,12 +507,10 @@ public:
       // Check if we're receiving data
       if (wb_receiver_get_queue_length(receivers_[i]) > 0) {
 
-
         assert(wb_receiver_get_queue_length(receivers_[i]) > 0);
         assert(wb_receiver_get_data_size(receivers_[i]) == sizeof(bid_t));
 
         pbid = (bid_t*) wb_receiver_get_data(receivers_[i]);
-
 
         assert(pbid->robot_id == i);
 
@@ -560,7 +558,7 @@ public:
 
       if (is_gps_tick) {
         buildMessage(i, NULL, MSG_EVENT_GPS_ONLY, &msg);
-//        printf("sending message %d , %d \n",msg.event_id,msg.robot_id);
+		//printf("sending message %d , %d \n",msg.event_id,msg.robot_id);
         while (wb_emitter_get_channel(emitter_) != i+1)
             wb_emitter_set_channel(emitter_, i+1);
         wb_emitter_send(emitter_, &msg, sizeof(message_t));
@@ -574,8 +572,8 @@ public:
         buildMessage(i, event, event_state, &msg);
         while (wb_emitter_get_channel(emitter_) != i+1)
               wb_emitter_set_channel(emitter_, i+1);
-//        printf("> Sent message to robot %d // event_state=%d\n", i, event_state);
-//        printf("sending message event %d , robot %d , emitter %d, channel %d\n",msg.event_id,msg.robot_id,emitter_,      wb_emitter_get_channel(emitter_));
+		// Debug print  printf("> Sent message to robot %d // event_state=%d\n", i, event_state);
+		// Debug print  printf("sending message event %d , robot %d , emitter %d, channel %d\n",msg.event_id,msg.robot_id,emitter_,      wb_emitter_get_channel(emitter_));
 
         wb_emitter_send(emitter_, &msg, sizeof(message_t));
       }
@@ -593,32 +591,32 @@ public:
     double step_seconds = (double)step_size / 1000.0;
 
     for (int i = 0; i < NUM_ROBOTS; i++) {
-        // 1. Check if Robot is Physically Alive (Battery Limit)
-        // We track this using our own counter in the supervisor to be safe
+        // Check if Robot is Physically Alive (Battery Limit)
+        // We track this using our own counter in the supervisor
         if (meta_active_time[i] >= 120.0) {
             continue; // Robot is dead, cannot be active
         }
 
-        // 2. Check if Robot has Work (Equivalent to Robot State != STAY)
+        // Check if Robot has work (equivalent to robot state != STAY)
         bool has_work = false;
         for(const auto& event_ptr : events_) {
-            // Check if this event is assigned to robot i AND not yet finished
+            // Check if this event is assigned to robot i and not yet finished
             if (event_ptr->is_assigned() && 
                 event_ptr->assigned_to_ == i && 
                 !event_ptr->is_done()) {
                 has_work = true;
-                break; // Found work, robot is active
+                break; // Found work so robot is active
             }
         }
 
-        // 3. Update Counters if Active
+        // Update counters if active
         if (has_work) {
             current_active_count++;
             
             // This matches the robot's "active_time += ms"
             meta_active_time[i] += step_seconds;
 
-            // Collision risk only counts if robot is moving/working
+            // Collision risk 
             if (is_in_collision_risk(i)) {
                 meta_collision_time[i] += step_seconds;
             }
@@ -642,10 +640,10 @@ public:
 
       printf("Handled %d events in %d seconds, events handled per second = %.2f\n",
              num_events_handled_, (int) clock_ / 1000, ehr);
-      printf("Performance: %f\n", perf);
+      // not needed printf("Performance: %f\n", perf);
       
-      // Metric 2: Average Collision Avoidance Time (%)
-      // We compute (Total Time < 0.05m) / (Total Active Time)
+      // Metric 2: average collision avoidance time 
+      // We compute (total time < 0.05m) / (total active time)
       double total_risk_time = 0;
       double total_active_time = 0;
       for(int i=0; i<NUM_ROBOTS; i++) {
