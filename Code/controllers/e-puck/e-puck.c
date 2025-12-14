@@ -347,7 +347,7 @@ static void receive_updates()
             }
 
             // Debug print printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
-            robot_id, msg.event_id, total_cost, robot_id+1);
+            // robot_id, msg.event_id, total_cost, robot_id+1);
                 
             // Send my bid to the supervisor
             const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
