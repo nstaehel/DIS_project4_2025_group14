@@ -454,7 +454,7 @@ public:
       double x = my_pos[0];
       double y = my_pos[1];
 
-      // 1. CHECK OTHER ROBOTS
+      // Check other robots
       for (int j = 0; j < NUM_ROBOTS; j++) {
           if (robot_id == j) continue;
           const double *other_pos = getRobotPos(j);
@@ -463,18 +463,18 @@ public:
           if (sqrt(dx*dx + dy*dy) < 0.05) return true; // Too close to neighbor
       }
 
-      // 2. CHECK OUTER WALLS (Arena Borders)
+      // Check outer walls
       // Distance to Right/Left or Top/Bottom walls
       if (ARENA_LIMIT - fabs(x) < 0.05) return true;
       if (ARENA_LIMIT - fabs(y) < 0.05) return true;
 
-      // 3. CHECK INTERNAL VERTICAL WALL
+      // Check internal vertical walls
       // Wall is at X=0.125, exists for Y > -0.275
       if (y > WALL_VERT_Y_MIN) {
           if (fabs(x - WALL_VERT_X) < 0.05) return true;
       }
 
-      // 4. CHECK INTERNAL HORIZONTAL WALL
+      // check internal horizontal walls 
       // Wall is at Y=0.0, exists for X < -0.26
       if (x < WALL_HORIZ_X_MAX) {
           if (fabs(y - WALL_HORIZ_Y) < 0.05) return true;
@@ -519,7 +519,7 @@ public:
         //Event* event = events_.at(pbid->event_id).get();
         
         Event* event = NULL;
-        // 1. We must search the list to find which event has this ID
+        // We must search the list to find which event has this ID
         for(auto& e : events_) {
             if(e->id_ == pbid->event_id) {
                 event = e.get();
