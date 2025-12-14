@@ -24,8 +24,6 @@
 WbDeviceTag left_motor; //handler for left wheel of the robot
 WbDeviceTag right_motor; //handler for the right wheel of the robot
 
-
-#define DEBUG 1
 #define TIME_STEP           64      // Timestep (ms)
 #define RX_PERIOD           2    // time difference between two received elements (ms) (1000)
 
@@ -42,7 +40,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 
 #define NUM_ROBOTS 5 // Change this also in the supervisor!
 
-// --- PATH PLANNING CONSTANTS ---
+// Path planning constants
 // Vertical Wall is at X=0.125. Gap is below Y=-0.2.
 #define VERTICAL_DOOR_X  0.125
 #define VERTICAL_DOOR_Y -0.50  // Safe point at the bottom
@@ -50,7 +48,6 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 // Horizontal Wall is at Y=0, X < -0.26. Gap is to the right.
 #define HORIZONTAL_DOOR_X -0.10 // Safe point near center
 #define HORIZONTAL_DOOR_Y  0.00
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Collective decision parameters */
@@ -104,12 +101,10 @@ float buff[99];             // Buffer for physics plugin
 
 double stat_max_velocity;
 
-
 // Proximity and radio handles
 WbDeviceTag emitter_tag, receiver_tag;
 static WbDeviceTag ds[NB_SENSORS];  // Handle for the infrared distance sensors
 // static WbDeviceTag radio;            // Radio
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* helper functions */
@@ -267,7 +262,6 @@ static void receive_updates()
         target_list_length = i;  
         
         if(target_list_length == 0) target_valid = 0;   
-
         
         // Event state machine
         if(msg.event_state == MSG_EVENT_GPS_ONLY)
@@ -355,7 +349,7 @@ static void receive_updates()
 				return;
 			}
 
-            // --- Find Best Insertion Index (Minimize Extra Distance) ---
+            // Find best insertion index to minimize the extra distance
             indx = 0;
             double best_cost_increase = 999;
 
@@ -398,7 +392,7 @@ static void receive_updates()
             // Calculate total time cost (Travel + Service) 
             double total_cost = calculate_bid(msg.event_x, msg.event_y, msg.event_type);
             
-            printf("Robot %d [Queue: %d/3]: Bidding on Event %d. Cost: %.2f.\n", 
+            // Debug print printf("Robot %d [Queue: %d/3]: Bidding on Event %d. Cost: %.2f.\n", 
                    robot_id, target_list_length, msg.event_id, total_cost);
 
 			// Send my bid to the supervisor
@@ -407,7 +401,6 @@ static void receive_updates()
             wb_emitter_send(emitter_tag, &my_bid, sizeof(bid_t));            
         }
     }
-    
     
     // Communication with physics plugin (channel 0)            
     i = 0; k = 1;
@@ -473,8 +466,6 @@ void reset(void)
 		target[i][3] = 0; // we inizialize the state to A but we will assign it in the line below
     }
 
-	
-
     // Start in the DEFAULT_STATE
     state = DEFAULT_STATE;
 
@@ -489,13 +480,6 @@ void reset(void)
 	else my_type = 1;
 
 	printf("DEBUG: I am Robot %d. My Type is %d (0=A, 1=B).\n", robot_id, my_type);
-
-    // Am I used in this simulation?
-    if (robot_id >= NUM_ROBOTS) {
-        fprintf(stderr, "Robot %d is not needed. exiting ...\n", robot_id); 
-        wb_robot_cleanup(); 
-        exit(0);
-    }
 
     // Link with webots nodes and devices (attention, use robot_id+1 as channels, because
     // channel 0 is reseved for physics plugin)
@@ -516,7 +500,6 @@ void reset(void)
 
 void update_state(int _sum_distances)
 {
-
     static int energy_depleted_printed = 0;
 
 	// first we check if we are over the MAX_ENERGY_TIME
