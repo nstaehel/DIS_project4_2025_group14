@@ -24,8 +24,6 @@
 WbDeviceTag left_motor; //handler for left wheel of the robot
 WbDeviceTag right_motor; //handler for the right wheel of the robot
 
-
-#define DEBUG 1
 #define TIME_STEP           64      // Timestep (ms)
 #define RX_PERIOD           2    // time difference between two received elements (ms) (1000)
 
@@ -42,7 +40,7 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 
 #define NUM_ROBOTS 5 // Change this also in the supervisor!
 
-// --- PATH PLANNING CONSTANTS ---
+// Path planning constants
 // Vertical Wall is at X=0.125. Gap is below Y=-0.2.
 #define VERTICAL_DOOR_X  0.125
 #define VERTICAL_DOOR_Y -0.50  // Safe point at the bottom
@@ -50,7 +48,6 @@ WbDeviceTag right_motor; //handler for the right wheel of the robot
 // Horizontal Wall is at Y=0, X < -0.26. Gap is to the right.
 #define HORIZONTAL_DOOR_X -0.10 // Safe point near center
 #define HORIZONTAL_DOOR_Y  0.00
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Collective decision parameters */
@@ -103,12 +100,10 @@ float buff[99];             // Buffer for physics plugin
 
 double stat_max_velocity;
 
-
 // Proximity and radio handles
 WbDeviceTag emitter_tag, receiver_tag;
 static WbDeviceTag ds[NB_SENSORS];  // Handle for the infrared distance sensors
 // static WbDeviceTag radio;            // Radio
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* helper functions */
@@ -269,7 +264,6 @@ static void receive_updates()
         target_list_length = i;  
         
         if(target_list_length == 0) target_valid = 0;   
-
         
         // Event state machine
         if(msg.event_state == MSG_EVENT_GPS_ONLY)
@@ -352,7 +346,7 @@ static void receive_updates()
                 return; // Stop here. Do not send bid.
             }
 
-            printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
+            // Debug print printf("robot %d: bidding on Event %d. Cost: %.2f. Sending on Channel %d\n", 
             robot_id, msg.event_id, total_cost, robot_id+1);
                 
             // Send my bid to the supervisor
@@ -427,7 +421,6 @@ void reset(void)
 		target[i][3] = 0; // we inizialize the state to A but we will assign it in the line below
     }
 
-
     // Start in the DEFAULT_STATE
     state = DEFAULT_STATE;
 
@@ -438,13 +431,11 @@ void reset(void)
     if (sscanf(robot_name, "e-puck%d", &tmp_id)) {robot_id = (uint16_t)tmp_id;} 
     else {fprintf(stderr, "ERROR: couldn't parse my id %s \n", robot_name); exit(1);}
 
-
     if (robot_id < 2) my_type = 0; // Assign the type of the robot, we have 2 robot type A (ID 0 and 1) and then 3 robot type B
 	else my_type = 1;
 	
 	printf("DEBUG: I am Robot %d. My Type is %d (0=A, 1=B).\n", robot_id, my_type);
     
-
     // Link with webots nodes and devices (attention, use robot_id+1 as channels, because
     // channel 0 is reseved for physics plugin)
     emitter_tag = wb_robot_get_device("emitter");
@@ -563,7 +554,6 @@ void compute_avoid_obstacle(int *msl, int *msr, int distances[])
 }
 
 // Checks if our path is blocked and returns the next immediate waypoint
-
 
 // RUN e-puck
 void run(int ms)
