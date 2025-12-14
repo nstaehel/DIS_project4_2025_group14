@@ -44,7 +44,6 @@ def average_intersection_area(r, k, n_runs=1000):
     
     return total_area / float(n_runs)
 
-# Example usage
 if __name__ == "__main__":
     # Parameters
     r = 0.5 # Circle radius (0.268 for type 1)
