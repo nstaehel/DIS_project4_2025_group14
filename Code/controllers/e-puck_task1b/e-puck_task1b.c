@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * file:        epuck_crown.c
+ * file:        e-puck_task1b.c
  * author:      
  * description: E-puck file for market-based task allocations task 1b
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
