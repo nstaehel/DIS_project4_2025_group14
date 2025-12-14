@@ -315,7 +315,7 @@ static void receive_updates()
             if(target_list_length-1 == 0) target_valid = 0; 
             target_list_length = target_list_length-1;  
             // DEBUG print printf("--- Robot %d COMPLETED Event %d. Tasks Remaining: %d.\n", 
-                   robot_id, msg.event_id, target_list_length);  
+                  // robot_id, msg.event_id, target_list_length);  
         }
         else if(msg.event_state == MSG_EVENT_WON)
         {
@@ -334,7 +334,7 @@ static void receive_updates()
             
             target_valid = 1; 
             target_list_length = target_list_length+1;
-            printf(">>> Robot %d WON Event %d! New Queue Size: %d/3. (Inserted at index %d)\n", 
+            // debug print printf(">>> Robot %d WON Event %d! New Queue Size: %d/3. (Inserted at index %d)\n", 
                    robot_id, msg.event_id, target_list_length, msg.event_index);
         }
         else if(msg.event_state == MSG_EVENT_NEW)
@@ -393,7 +393,7 @@ static void receive_updates()
             double total_cost = calculate_bid(msg.event_x, msg.event_y, msg.event_type);
             
             // Debug print printf("Robot %d [Queue: %d/3]: Bidding on Event %d. Cost: %.2f.\n", 
-                   robot_id, target_list_length, msg.event_id, total_cost);
+              //     robot_id, target_list_length, msg.event_id, total_cost);
 
 			// Send my bid to the supervisor
             const bid_t my_bid = {robot_id, msg.event_id, total_cost, indx};
